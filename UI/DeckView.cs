@@ -168,6 +168,7 @@ namespace YugiohDeck.UI
         private void drawTestButton_Click(object sender, EventArgs e)
         {
             var drawTestForm = new DrawTestForm(this.Deck.MainDeck.Cards);
+            drawTestForm.DescriptionRequested += (_, ee) => this.DescriptionRequested?.Invoke(this, ee);
             drawTestForm.Show(this.ParentForm);
         }
     }

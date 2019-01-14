@@ -11,6 +11,7 @@ namespace YugiohDeck.UI
         private readonly Random random = new Random();
         private readonly Card[] cards;
         private IList<int> drawnCardIndexes;
+        public event EventHandler<Card> DescriptionRequested;
         public DrawTestForm(IEnumerable<Card> cards)
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace YugiohDeck.UI
         private void AddCardToView(Card card)
         {
             var cardView = new CardView() { Card = card };
+            cardView.DescriptionRequested += (_, e) => this.DescriptionRequested?.Invoke(this, e);
             this.panel.Controls.Add(cardView);
             this.messageLabel.Text = $"{card.Name}を引いた";
         }
