@@ -80,7 +80,7 @@ namespace YugiohDeck.Database
                         var monsterAttack = GetMonsterBattleStatus(monsterTableDataTags[3].TextContent);
                         var monsterDefence = GetMonsterBattleStatus(monsterTableDataTags[4].TextContent);
                         var cardText = GetCardText(monsterStatusElement.NextElementSibling.GetElementsByTagName("span")[0].TextContent);
-                        if(cardText.StartsWith("リバース："))
+                        if (cardText.StartsWith("リバース："))
                         {
                             kinds.Add(CardKind.ReverseMonster);
                         }

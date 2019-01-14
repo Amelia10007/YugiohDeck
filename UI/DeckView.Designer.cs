@@ -37,6 +37,7 @@
             this.deckCountLabel = new System.Windows.Forms.Label();
             this.closeButton = new System.Windows.Forms.Button();
             this.renameButton = new System.Windows.Forms.Button();
+            this.drawTestButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainDeckPanel
@@ -45,30 +46,30 @@
             this.mainDeckPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.mainDeckPanel.Location = new System.Drawing.Point(4, 3);
             this.mainDeckPanel.Name = "mainDeckPanel";
-            this.mainDeckPanel.Size = new System.Drawing.Size(703, 296);
+            this.mainDeckPanel.Size = new System.Drawing.Size(703, 383);
             this.mainDeckPanel.TabIndex = 0;
             // 
             // extraDeckPanel
             // 
             this.extraDeckPanel.AutoScroll = true;
             this.extraDeckPanel.BackColor = System.Drawing.Color.Thistle;
-            this.extraDeckPanel.Location = new System.Drawing.Point(4, 305);
+            this.extraDeckPanel.Location = new System.Drawing.Point(3, 392);
             this.extraDeckPanel.Name = "extraDeckPanel";
-            this.extraDeckPanel.Size = new System.Drawing.Size(703, 105);
+            this.extraDeckPanel.Size = new System.Drawing.Size(703, 115);
             this.extraDeckPanel.TabIndex = 1;
             // 
             // sideDeckPanel
             // 
             this.sideDeckPanel.AutoScroll = true;
             this.sideDeckPanel.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.sideDeckPanel.Location = new System.Drawing.Point(4, 416);
+            this.sideDeckPanel.Location = new System.Drawing.Point(4, 513);
             this.sideDeckPanel.Name = "sideDeckPanel";
             this.sideDeckPanel.Size = new System.Drawing.Size(703, 100);
             this.sideDeckPanel.TabIndex = 2;
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(4, 521);
+            this.saveButton.Location = new System.Drawing.Point(4, 619);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 0;
@@ -78,7 +79,7 @@
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(246, 521);
+            this.deleteButton.Location = new System.Drawing.Point(408, 620);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 23);
             this.deleteButton.TabIndex = 4;
@@ -88,7 +89,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(84, 521);
+            this.clearButton.Location = new System.Drawing.Point(84, 619);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 5;
@@ -99,7 +100,7 @@
             // deckCountLabel
             // 
             this.deckCountLabel.AutoSize = true;
-            this.deckCountLabel.Location = new System.Drawing.Point(566, 532);
+            this.deckCountLabel.Location = new System.Drawing.Point(566, 630);
             this.deckCountLabel.Name = "deckCountLabel";
             this.deckCountLabel.Size = new System.Drawing.Size(126, 12);
             this.deckCountLabel.TabIndex = 6;
@@ -107,7 +108,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(324, 521);
+            this.closeButton.Location = new System.Drawing.Point(327, 619);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 7;
@@ -117,7 +118,7 @@
             // 
             // renameButton
             // 
-            this.renameButton.Location = new System.Drawing.Point(165, 521);
+            this.renameButton.Location = new System.Drawing.Point(165, 619);
             this.renameButton.Name = "renameButton";
             this.renameButton.Size = new System.Drawing.Size(75, 23);
             this.renameButton.TabIndex = 8;
@@ -125,21 +126,32 @@
             this.renameButton.UseVisualStyleBackColor = true;
             this.renameButton.Click += new System.EventHandler(this.renameButton_Click);
             // 
+            // drawTestButton
+            // 
+            this.drawTestButton.Location = new System.Drawing.Point(246, 619);
+            this.drawTestButton.Name = "drawTestButton";
+            this.drawTestButton.Size = new System.Drawing.Size(75, 23);
+            this.drawTestButton.TabIndex = 9;
+            this.drawTestButton.Text = "お試しドロー";
+            this.drawTestButton.UseVisualStyleBackColor = true;
+            this.drawTestButton.Click += new System.EventHandler(this.drawTestButton_Click);
+            // 
             // DeckView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.renameButton);
+            this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.closeButton);
+            this.Controls.Add(this.drawTestButton);
+            this.Controls.Add(this.renameButton);
             this.Controls.Add(this.deckCountLabel);
             this.Controls.Add(this.clearButton);
-            this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.sideDeckPanel);
             this.Controls.Add(this.extraDeckPanel);
             this.Controls.Add(this.mainDeckPanel);
             this.Name = "DeckView";
-            this.Size = new System.Drawing.Size(710, 547);
+            this.Size = new System.Drawing.Size(710, 650);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,5 +168,6 @@
         private System.Windows.Forms.Label deckCountLabel;
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button renameButton;
+        private System.Windows.Forms.Button drawTestButton;
     }
 }

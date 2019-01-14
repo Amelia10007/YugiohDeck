@@ -22,5 +22,17 @@ namespace YugiohDeck.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int 設定 {
+            get {
+                return ((int)(this["設定"]));
+            }
+            set {
+                this["設定"] = value;
+            }
+        }
     }
 }

@@ -113,6 +113,12 @@
       <DependentUpon>DeckView.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtension.cs" />
+    <Compile Include="UI\DrawTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\DrawTestForm.Designer.cs">
+      <DependentUpon>DrawTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DeckView.resx">
       <DependentUpon>DeckView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DrawTestForm.resx">
+      <DependentUpon>DrawTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>

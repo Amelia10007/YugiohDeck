@@ -164,5 +164,11 @@ namespace YugiohDeck.UI
             this.DeckClosed?.Invoke(this, EventArgs.Empty);
             this.MessageSent?.Invoke(this, $"デッキ:{this.Deck.Name}を閉じました．");
         }
+
+        private void drawTestButton_Click(object sender, EventArgs e)
+        {
+            var drawTestForm = new DrawTestForm(this.Deck.MainDeck.Cards);
+            drawTestForm.Show(this.ParentForm);
+        }
     }
 }

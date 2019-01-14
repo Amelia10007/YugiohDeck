@@ -60,7 +60,7 @@
             // 
             // openButton
             // 
-            this.openButton.Location = new System.Drawing.Point(93, 570);
+            this.openButton.Location = new System.Drawing.Point(93, 676);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 23);
             this.openButton.TabIndex = 7;
@@ -70,7 +70,7 @@
             // 
             // createButton
             // 
-            this.createButton.Location = new System.Drawing.Point(12, 570);
+            this.createButton.Location = new System.Drawing.Point(12, 676);
             this.createButton.Name = "createButton";
             this.createButton.Size = new System.Drawing.Size(75, 23);
             this.createButton.TabIndex = 8;
@@ -86,7 +86,7 @@
             this.searchResultPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.searchResultPanel.Location = new System.Drawing.Point(2, 38);
             this.searchResultPanel.Name = "searchResultPanel";
-            this.searchResultPanel.Size = new System.Drawing.Size(683, 329);
+            this.searchResultPanel.Size = new System.Drawing.Size(683, 442);
             this.searchResultPanel.TabIndex = 10;
             this.searchResultPanel.WrapContents = false;
             // 
@@ -95,7 +95,7 @@
             this.deckTab.Location = new System.Drawing.Point(691, 6);
             this.deckTab.Name = "deckTab";
             this.deckTab.SelectedIndex = 0;
-            this.deckTab.Size = new System.Drawing.Size(720, 581);
+            this.deckTab.Size = new System.Drawing.Size(720, 693);
             this.deckTab.TabIndex = 11;
             // 
             // onlineSearchButton
@@ -111,7 +111,7 @@
             // messageLabel
             // 
             this.messageLabel.AutoSize = true;
-            this.messageLabel.Location = new System.Drawing.Point(255, 575);
+            this.messageLabel.Location = new System.Drawing.Point(255, 681);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(50, 12);
             this.messageLabel.TabIndex = 15;
@@ -120,8 +120,8 @@
             // cardDescription
             // 
             this.cardDescription.Card = null;
-            this.cardDescription.Location = new System.Drawing.Point(44, 380);
-            this.cardDescription.Name = "cardDescription1";
+            this.cardDescription.Location = new System.Drawing.Point(44, 486);
+            this.cardDescription.Name = "cardDescription";
             this.cardDescription.Size = new System.Drawing.Size(582, 184);
             this.cardDescription.TabIndex = 16;
             // 
@@ -129,7 +129,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1423, 601);
+            this.ClientSize = new System.Drawing.Size(1423, 711);
             this.Controls.Add(this.cardDescription);
             this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.onlineSearchButton);
