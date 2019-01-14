@@ -8,7 +8,6 @@ namespace YugiohDeck.UI
     partial class CardDescription : UserControl
     {
         private Card card;
-        public event EventHandler<string> MessageSent;
         public Card Card
         {
             get => this.card;
@@ -28,7 +27,7 @@ namespace YugiohDeck.UI
                 this.headerLabel.ForeColor = front;
                 this.descriptionLabel.ForeColor = front;
                 this.BackColor = back;
-                this.pictureBox.Image = value.Image?.Image ?? this.pictureBox.ErrorImage;
+                this.pictureBox.Image = value.Image?.Image ?? this.pictureBox.InitialImage;
             }
         }
         public CardDescription()

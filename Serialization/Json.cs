@@ -22,12 +22,12 @@ namespace YugiohDeck.Serialization
         /// <exception cref="System.Runtime.Serialization.InvalidDataContractException"></exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public static Json Serialize<T>(T source)
+        public static Json Serialize<T>(T source, bool indent)
         {
             var serializer = new DataContractJsonSerializer(typeof(T), settings);
             using (var stream = new MemoryStream())
             {
-                using (var writer = JsonReaderWriterFactory.CreateJsonWriter(stream, encoding, true, true, jsonIndent))
+                using (var writer = JsonReaderWriterFactory.CreateJsonWriter(stream, encoding, true, indent, jsonIndent))
                 {
                     serializer.WriteObject(writer, source);
                     writer.Flush();

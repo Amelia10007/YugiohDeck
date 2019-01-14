@@ -69,41 +69,44 @@ namespace YugiohDeck.Core
             ContinuousTrap,
             CounterTrap,
         };
-        [DataMember] public readonly string Kind;
-        public bool IsMonster => monsterCardKinds.Any(k => k.Kind == this.Kind);
-        public bool IsExtra => extraDeckCardKinds.Any(k => k.Kind == this.Kind);
-        public bool IsSpell => spellCardKinds.Any(k => k.Kind == this.Kind);
-        public bool IsTrap => trapCardKinds.Any(k => k.Kind == this.Kind);
-        private CardKind(string kind) => this.Kind = kind;
-        public bool Equals(CardKind other) => this.GetComparisonOrder().Equals(other.GetComparisonOrder());
+        [DataMember] private readonly string kind;
+        public bool IsMonster => monsterCardKinds.Any(k => k.kind == this.kind);
+        public bool IsExtra => extraDeckCardKinds.Any(k => k.kind == this.kind);
+        public bool IsSpell => spellCardKinds.Any(k => k.kind == this.kind);
+        public bool IsTrap => trapCardKinds.Any(k => k.kind == this.kind);
+        private CardKind(string kind) => this.kind = kind;
+        public bool Equals(CardKind other) => this.kind.Equals(other.kind);
         public int CompareTo(CardKind other) => this.GetComparisonOrder().CompareTo(other.GetComparisonOrder());
+        public override bool Equals(object obj) => this.Equals(obj as CardKind);
+        public override int GetHashCode() => this.kind.GetHashCode();
+        public override string ToString() => this.kind;
         private int GetComparisonOrder()
         {
             return
-                this.Kind == NormalMonster.Kind ? 0
-                : this.Kind == EffectMonster.Kind ? 10
-                : this.Kind == DualMonster.Kind ? 20
-                : this.Kind == SpiritMonster.Kind ? 30
-                : this.Kind == TunarMonster.Kind ? 40
-                : this.Kind == ReverseMonster.Kind ? 50
-                : this.Kind == ToonMonster.Kind ? 60
-                : this.Kind == SpecialSummonMonster.Kind ? 70
-                : this.Kind == RitualMonster.Kind ? 80
-                : this.Kind == FusionMonster.Kind ? 90
-                : this.Kind == SynchroMonster.Kind ? 100
-                : this.Kind == XyzMonster.Kind ? 110
-                : this.Kind == PendulumMonster.Kind ? 120
-                : this.Kind == LinkMonster.Kind ? 130
-                : this.Kind == NormalSpell.Kind ? 140
-                : this.Kind == RitualSpell.Kind ? 150
-                : this.Kind == EquipSpell.Kind ? 160
-                : this.Kind == FieldSpell.Kind ? 170
-                : this.Kind == ContinuousSpell.Kind ? 180
-                : this.Kind == QuickSpell.Kind ? 190
-                : this.Kind == NormalTrap.Kind ? 200
-                : this.Kind == ContinuousTrap.Kind ? 210
-                : this.Kind == CounterTrap.Kind ? 220
-                : throw new InvalidOperationException($"unexpected kind '{this.Kind}'");
+                this.kind == NormalMonster.kind ? 0
+                : this.kind == EffectMonster.kind ? 10
+                : this.kind == DualMonster.kind ? 20
+                : this.kind == SpiritMonster.kind ? 30
+                : this.kind == TunarMonster.kind ? 40
+                : this.kind == ReverseMonster.kind ? 50
+                : this.kind == ToonMonster.kind ? 60
+                : this.kind == SpecialSummonMonster.kind ? 70
+                : this.kind == RitualMonster.kind ? 80
+                : this.kind == FusionMonster.kind ? 90
+                : this.kind == SynchroMonster.kind ? 100
+                : this.kind == XyzMonster.kind ? 110
+                : this.kind == PendulumMonster.kind ? 120
+                : this.kind == LinkMonster.kind ? 130
+                : this.kind == NormalSpell.kind ? 140
+                : this.kind == RitualSpell.kind ? 150
+                : this.kind == EquipSpell.kind ? 160
+                : this.kind == FieldSpell.kind ? 170
+                : this.kind == ContinuousSpell.kind ? 180
+                : this.kind == QuickSpell.kind ? 190
+                : this.kind == NormalTrap.kind ? 200
+                : this.kind == ContinuousTrap.kind ? 210
+                : this.kind == CounterTrap.kind ? 220
+                : throw new InvalidOperationException($"unexpected kind '{this.kind}'");
         }
     }
 }

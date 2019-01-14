@@ -19,6 +19,7 @@ namespace YugiohDeck.UI
         private static readonly Color trap = Color.MistyRose;
         public static Color GetColor(IEnumerable<CardKind> kinds)
         {
+            var xx = kinds.Contains(CardKind.NormalMonster);
             return
                 kinds.Any(k => k.IsSpell) ? spell
                 : kinds.Any(k => k.IsTrap) ? trap
@@ -29,7 +30,7 @@ namespace YugiohDeck.UI
                 : kinds.Contains(CardKind.RitualMonster) ? ritual
                 : kinds.Contains(CardKind.EffectMonster) ? effect
                 : kinds.Contains(CardKind.NormalMonster) ? normal
-                : throw new ArgumentException();
+                : throw new ArgumentException($"no valid {nameof(CardKind)} element exists");
         }
     }
 }

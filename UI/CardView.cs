@@ -38,9 +38,5 @@ namespace YugiohDeck.UI
         {
             this.DescriptionRequested?.Invoke(this, this.card);
         }
-
-        private void pictureBox_MouseLeave(object sender, EventArgs e)
-        {
-        }
     }
 }

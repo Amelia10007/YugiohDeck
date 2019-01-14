@@ -8,6 +8,7 @@ namespace YugiohDeck.Database
 {
     static class LocalDeckDatabase
     {
+        private static readonly string fileExtension = ".json";
         private static readonly string deckKeyword = "deck";
         /// <summary>
         /// 
@@ -19,7 +20,8 @@ namespace YugiohDeck.Database
         /// <exception cref="System.IO.FileNotFoundException"></exception>
         public static Deck SearchDeck(string deckName)
         {
-            var content = Storage.ReadString(deckKeyword, deckName);
+            var keywords = GetKeywords(deckName);
+            var content = Storage.ReadString(keywords);
             return Json.Deserialize<Deck>(content);
         }
         /// <summary>
@@ -30,8 +32,9 @@ namespace YugiohDeck.Database
         /// <exception cref="System.IO.IOException"></exception>
         public static IEnumerable<string> EnumerateDeckNames()
         {
-            return Storage.EnumerateExistingFiles(false, deckKeyword)
-                .Select(file => file.Last());
+            return Storage.EnumerateExistingFiles(false, deckKeyword.ToEnumerable())
+                .Select(keywords => keywords.Last())
+                .Select(filename => filename.Replace(fileExtension, ""));
         }
         /// <summary>
         /// 
@@ -44,8 +47,9 @@ namespace YugiohDeck.Database
         /// <exception cref="System.IO.IOException"></exception>
         public static void SaveDeck(Deck deck)
         {
-            var json = Json.Serialize(deck);
-            Storage.WriteString(json.ToString(), deckKeyword, deck.Name);
+            var json = Json.Serialize(deck, true);
+            var keywords = GetKeywords(deck.Name);
+            Storage.WriteString(json.ToString(), keywords);
         }
         /// <summary>
         /// 
@@ -55,7 +59,9 @@ namespace YugiohDeck.Database
         /// <exception cref="System.IO.IOException"></exception>
         public static void DeleteDeck(string deckName)
         {
-            Storage.Delete(deckKeyword, deckName);
+            var keywords = GetKeywords(deckName);
+            Storage.Delete(keywords);
         }
+        private static string[] GetKeywords(string deckName) => new[] { deckKeyword, deckName + fileExtension };
     }
 }

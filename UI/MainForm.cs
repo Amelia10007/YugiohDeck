@@ -15,13 +15,8 @@ namespace YugiohDeck.UI
         public MainForm()
         {
             InitializeComponent();
-            this.cardDescription.MessageSent += (_, e) => this.messageLabel.Text = e;
             this.localCardDatabase = new LocalCardDatabase();
-            this.onlineCardDatabase = new YugiohListDotComDatabase()
-            {
-                LocalCardDatabase = this.localCardDatabase,
-                UseLocalDatabase = true
-            };
+            this.onlineCardDatabase = new YugiohListDotComDatabase();
         }
 
         private void AddSearchResult(Card card)
@@ -49,16 +44,7 @@ namespace YugiohDeck.UI
 
         private void AddDeckView(string deckName, bool createNew)
         {
-            Deck deck;
-            try
-            {
-                deck = createNew ? new Deck(deckName) : LocalDeckDatabase.SearchDeck(deckName);
-            }
-            catch (Exception e)
-            {
-                this.messageLabel.Text = $"デッキ{deckName}の読み込みに失敗しました:{e.Message}";
-                return;
-            }
+            var deck = createNew ? new Deck(deckName) : LocalDeckDatabase.SearchDeck(deckName);
             var deckView = new DeckView() { Deck = deck };
             var tabPage = new TabPage(deckName);
             deckView.DescriptionRequested += (_, card) => this.ShowCardDescription(card);
@@ -111,7 +97,7 @@ namespace YugiohDeck.UI
                 this.AddSearchResult(card);
                 this.messageLabel.Text = $"ヒット:{card}";
             }
-            this.messageLabel.Text = $"検索結果:{cards.Count}件";
+            this.messageLabel.Text = $"検索結果:{cards.Length}件";
             this.EnableAllButtons(true);
         }
 
@@ -134,15 +120,27 @@ namespace YugiohDeck.UI
 
         private void createButton_Click(object sender, EventArgs e)
         {
-            var deckName = Microsoft.VisualBasic.Interaction.InputBox("デッキ名を決めてください", "デッキ新規作成", "name");
-            if (string.IsNullOrWhiteSpace(deckName)) return;
+            var inputForm = new InputForm()
+            {
+                InputTitle = "新しいデッキ名を決めてください",
+            };
+            inputForm.ShowDialog(this.ParentForm);
+            if (inputForm.InputResult != DialogResult.OK) return;
+            var deckName = inputForm.InputText;
             if (LocalDeckDatabase.EnumerateDeckNames().Contains(deckName))
             {
                 MessageBox.Show($"デッキ \'{deckName}\'は既に存在します．");
                 return;
             }
-            this.AddDeckView(deckName, true);
-            this.messageLabel.Text = $"デッキ:{deckName}を作成しました．";
+            try
+            {
+                this.AddDeckView(deckName, true);
+                this.messageLabel.Text = $"デッキ:{deckName}を作成しました．";
+            }
+            catch (Exception ex)
+            {
+                this.messageLabel.Text = $"デッキ:{deckName}の作成に失敗しました:{ex.Message}";
+            }
         }
 
         private void openButton_Click(object sender, EventArgs e)
@@ -161,8 +159,15 @@ namespace YugiohDeck.UI
             var openDeckNames = selectedDeckNames.Except(openedDeckNames);
             foreach (var deckName in openDeckNames)
             {
-                this.AddDeckView(deckName, false);
-                this.messageLabel.Text = $"デッキ:{deckName}を開きました．";
+                try
+                {
+                    this.AddDeckView(deckName, false);
+                    this.messageLabel.Text = $"デッキ:{deckName}を開きました．";
+                }
+                catch(Exception ex)
+                {
+                    this.messageLabel.Text = $"デッキ:{deckName}を開けませんでした:{ex.Message}";
+                }
             }
         }
     }

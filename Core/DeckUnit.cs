@@ -14,7 +14,7 @@ namespace YugiohDeck.Core
         [DataMember]
         private Dictionary<string, int> CardNames
         {
-            get => this.CardCounts.ToDictionary(c => c.Key.ToString(), c => c.Value);
+            get => this.CardCounts.ToDictionary(c => c.Key.Name, c => c.Value);
             set
             {
                 var localCardDatabase = new LocalCardDatabase();

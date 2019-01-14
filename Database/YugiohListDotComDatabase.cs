@@ -13,12 +13,8 @@ namespace YugiohDeck.Database
     class YugiohListDotComDatabase : ICardDatabase
     {
         private static readonly HttpClient httpClient = new HttpClient();
-        public LocalCardDatabase LocalCardDatabase { get; set; }
-        public bool UseLocalDatabase { get; set; }
         public YugiohListDotComDatabase()
         {
-            this.LocalCardDatabase = LocalCardDatabase;
-            this.UseLocalDatabase = true;
         }
         public async Task<bool> ExistsAsync(string cardName)
         {
@@ -64,13 +60,6 @@ namespace YugiohDeck.Database
                 try
                 {
                     var cardName = tableDataTags[2].GetElementsByTagName("a")[0].TextContent;
-                    //すでにローカルに保存されたカードなら，ローカルからデータを持ってくる
-                    if (this.UseLocalDatabase && (this.LocalCardDatabase?.Exists(cardName) ?? false))
-                    {
-                        var card = this.LocalCardDatabase.SearchCard(cardName);
-                        cards.Add(card);
-                        continue;
-                    }
                     var imageTag = tableDataTags[0].GetElementsByTagName("img")[0];
                     var imageUri = new Uri($"https://yugioh-list.com{imageTag.Attributes[0].Value}");
                     var image = await GetCardImageAsync(imageUri);
@@ -79,7 +68,7 @@ namespace YugiohDeck.Database
                         : limitationText == "準制限" ? CardLimitation.SemiLimited
                         : limitationText == "制限" ? CardLimitation.Limited
                         : CardLimitation.Forbidden;
-                    var kinds = GetCardKinds(tableDataTags[3].GetElementsByTagName("a").Select(element => element.TextContent));
+                    var kinds = GetCardKinds(tableDataTags[3].GetElementsByTagName("a").Select(element => element.TextContent)).ToList();
                     var isMonster = kinds.Any(k => k.IsMonster);
                     if (isMonster)
                     {
@@ -91,6 +80,10 @@ namespace YugiohDeck.Database
                         var monsterAttack = GetMonsterBattleStatus(monsterTableDataTags[3].TextContent);
                         var monsterDefence = GetMonsterBattleStatus(monsterTableDataTags[4].TextContent);
                         var cardText = GetCardText(monsterStatusElement.NextElementSibling.GetElementsByTagName("span")[0].TextContent);
+                        if(cardText.StartsWith("リバース："))
+                        {
+                            kinds.Add(CardKind.ReverseMonster);
+                        }
                         if (kinds.Contains(CardKind.LinkMonster))
                         {
                             monsterLevel = monsterStatusElement.NextElementSibling
@@ -191,24 +184,6 @@ namespace YugiohDeck.Database
         {
             if (int.TryParse(status, out var n)) return n;
             else return null;
-        }
-        private static IEnumerable<Tuple<string, IHtmlDocument>> TestDocuments()
-        {
-            var parser = new HtmlParser();
-            return
-                from file in System.IO.Directory.EnumerateFiles(@"C:\Users\kohama\source\repos\YugiohDeck\HtmlExample")
-                let content = System.IO.File.ReadAllText(file)
-                let document = parser.Parse(content)
-                select new Tuple<string, IHtmlDocument>(file, document);
-        }
-        public void Test()
-        {
-            foreach (var tuple in TestDocuments())
-            {
-                var file = tuple.Item1;
-                var document = tuple.Item2;
-                var cards = LoadCardsFromHtmlAsync(document).Result;
-            }
         }
     }
 }

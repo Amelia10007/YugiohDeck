@@ -33,21 +33,21 @@ namespace YugiohDeck.UI
         {
             this.Deck.MainDeck.Add(card);
             this.AddCardToDeckView(this.mainDeckPanel, this.Deck.MainDeck, card);
-            this.MessageSent?.Invoke(this, $"{card}をメインデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.Name}をメインデッキに追加しました．");
         }
         public void AddCardToExtraDeck(Card card)
         {
             this.Deck.ExtraDeck.Add(card);
             this.AddCardToDeckView(this.extraDeckPanel, this.Deck.ExtraDeck, card);
-            this.MessageSent?.Invoke(this, $"{card}をエクストラデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.Name}をエクストラデッキに追加しました．");
         }
         public void AddCardToSideDeck(Card card)
         {
             this.Deck.SideDeck.Add(card);
             this.AddCardToDeckView(this.sideDeckPanel, this.Deck.SideDeck, card);
-            this.MessageSent?.Invoke(this, $"{card}をサイドデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.Name}をサイドデッキに追加しました．");
         }
-        private void UpdateLabel()
+        private void UpdateDeckCountLabel()
         {
             var isLegal = this.Deck.IsLegalDeck();
             var labelColor = isLegal ? Color.Black : Color.Red;
@@ -71,16 +71,16 @@ namespace YugiohDeck.UI
             {
                 deck.Add(card);
                 this.AddCardToDeckView(panel, deck, card);
-                this.MessageSent?.Invoke(this, $"{card}をデッキに追加しました．");
+                this.MessageSent?.Invoke(this, $"{card.Name}をデッキに追加しました．");
             };
             view.RemoveButtonClicked += (_, e) =>
             {
                 this.RemoveCardFromDeckView(panel, deck, card);
-                this.MessageSent?.Invoke(this, $"{card}をデッキから削除しました．");
+                this.MessageSent?.Invoke(this, $"{card.Name}をデッキから削除しました．");
             };
             panel.Controls.Add(view);
             panel.Controls.SetChildIndex(view, insertIndex);
-            this.UpdateLabel();
+            this.UpdateDeckCountLabel();
         }
 
         private void RemoveCardFromDeckView(Panel panel, DeckUnit deck, Card card)
@@ -88,8 +88,8 @@ namespace YugiohDeck.UI
             var removeIndex = deck.Cards.IndexOf(card);
             deck.Remove(card);
             panel.Controls.RemoveAt(removeIndex);
-            this.UpdateLabel();
-            this.MessageSent?.Invoke(this, $"{card}をデッキから削除しました．");
+            this.UpdateDeckCountLabel();
+            this.MessageSent?.Invoke(this, $"{card.Name}をデッキから削除しました．");
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -120,11 +120,13 @@ namespace YugiohDeck.UI
 
         private void renameButton_Click(object sender, EventArgs e)
         {
-            var deckName = Microsoft.VisualBasic.Interaction.InputBox("デッキ名を決めてください", "デッキ名前変更", "name");
-            if (string.IsNullOrWhiteSpace(deckName))
+            var inputForm = new InputForm()
             {
-                return;
-            }
+                InputTitle = "新しいデッキ名を決めてください",
+            };
+            inputForm.ShowDialog(this.ParentForm);
+            if (inputForm.InputResult != DialogResult.OK) return;
+            var deckName = inputForm.InputText;
             try
             {
                 LocalDeckDatabase.DeleteDeck(this.Deck.Name);
@@ -148,7 +150,7 @@ namespace YugiohDeck.UI
                 {
                     LocalDeckDatabase.DeleteDeck(this.Deck.Name);
                     this.DeckRemoved?.Invoke(this, EventArgs.Empty);
-                    this.MessageSent?.Invoke(this, $"デッキ:{this.Deck}を削除しました．");
+                    this.MessageSent?.Invoke(this, $"デッキ:{this.Deck.Name}を削除しました．");
                 }
                 catch (Exception ex)
                 {
@@ -160,7 +162,7 @@ namespace YugiohDeck.UI
         private void closeButton_Click(object sender, EventArgs e)
         {
             this.DeckClosed?.Invoke(this, EventArgs.Empty);
-            this.MessageSent?.Invoke(this, $"デッキ:{this.Deck}を閉じました．");
+            this.MessageSent?.Invoke(this, $"デッキ:{this.Deck.Name}を閉じました．");
         }
     }
 }

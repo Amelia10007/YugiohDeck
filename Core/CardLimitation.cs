@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace YugiohDeck.Core
@@ -15,7 +11,7 @@ namespace YugiohDeck.Core
         public static readonly CardLimitation Limited = new CardLimitation(1);
         public static readonly CardLimitation Forbidden = new CardLimitation(0);
         [DataMember] public readonly int MaxCount;
-        public bool HasLimit => !this.Equals(Unlimited);
+        public bool HasLimit => this.MaxCount < Unlimited.MaxCount;
         private CardLimitation(int maxCount) => this.MaxCount = maxCount;
         public bool Allow(int count) => this.MaxCount >= count;
         public bool Equals(CardLimitation other) => ReferenceEquals(this, other);
@@ -23,11 +19,11 @@ namespace YugiohDeck.Core
         {
             switch (this.MaxCount)
             {
-                case 3: return "";
+                case 3: return "無制限";
                 case 2: return "準制限";
                 case 1: return "制限";
                 case 0: return "禁止";
-                default: throw new InvalidOperationException();
+                default: throw new InvalidOperationException($"unexpected property {nameof(this.MaxCount)}:{this.MaxCount}");
             }
         }
     }
