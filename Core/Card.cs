@@ -87,7 +87,7 @@ namespace YugiohDeck.Core
         public int CompareTo(Card other)
         {
             var maxKind = this.Kinds.Max();
-            var otherMaxKind = this.Kinds.Max();
+            var otherMaxKind = other.Kinds.Max();
             var kindComparison = maxKind.CompareTo(otherMaxKind);
             if (kindComparison != 0) return kindComparison;
             return this.Name.CompareTo(other.Name);
