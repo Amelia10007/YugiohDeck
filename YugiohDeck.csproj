@@ -111,7 +111,7 @@
     <Compile Include="UI\DeckView.Designer.cs">
       <DependentUpon>DeckView.cs</DependentUpon>
     </Compile>
-    <Compile Include="EnumerableExtension.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="UI\DrawTestForm.cs">
       <SubType>Form</SubType>
     </Compile>

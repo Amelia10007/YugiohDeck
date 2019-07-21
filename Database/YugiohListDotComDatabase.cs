@@ -74,12 +74,13 @@ namespace YugiohDeck.Database
                     {
                         var monsterStatusElement = cardDeclarationTag.NextElementSibling;
                         var monsterTableDataTags = monsterStatusElement.GetElementsByTagName("td");
-                        var monsterAttribute = monsterTableDataTags[0].GetElementsByTagName("img")[0].Attributes[1].Value.Substring(0, 1);
-                        var monsterLevel = monsterTableDataTags[1].TextContent;
-                        var monsterType = monsterTableDataTags[2].GetElementsByTagName("a")[0].TextContent.TrimEnd('族');
-                        var monsterAttack = GetMonsterBattleStatus(monsterTableDataTags[3].TextContent);
-                        var monsterDefence = GetMonsterBattleStatus(monsterTableDataTags[4].TextContent);
-                        var cardText = GetCardText(monsterStatusElement.NextElementSibling.GetElementsByTagName("span")[0].TextContent);
+                        var monsterAttribute = Extension.TryGet<string, Exception>(() => monsterTableDataTags[0].GetElementsByTagName("img")[0].Attributes[1].Value.Substring(0, 1), "None");
+                        var monsterLevel = Extension.TryGet<string, Exception>(() => monsterTableDataTags[1].TextContent, "None");
+                        var monsterType = Extension.TryGet<string, Exception>(() => monsterTableDataTags[2].GetElementsByTagName("a")[0].TextContent.TrimEnd('族'), "None");
+                        var monsterAttack = Extension.TryGet<int?, Exception>(() => GetMonsterBattleStatus(monsterTableDataTags[3].TextContent), null);
+                        var monsterDefence = Extension.TryGet<int?, Exception>(() => GetMonsterBattleStatus(monsterTableDataTags[4].TextContent), null);
+                        var cardTextElement = monsterStatusElement.NextElementSibling ?? monsterStatusElement;
+                        var cardText = GetCardText(cardTextElement.GetElementsByTagName("span")[0].TextContent);
                         if (cardText.StartsWith("リバース："))
                         {
                             kinds.Add(CardKind.ReverseMonster);
