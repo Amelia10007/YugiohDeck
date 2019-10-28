@@ -10,6 +10,7 @@ namespace YugiohDeck.Core
     sealed class Card : IEquatable<Card>, IComparable<Card>
     {
         [DataMember] public readonly string Name;
+        [DataMember] public readonly string Pronunciation;
         [DataMember] public readonly CardLimitation Limitation;
         [DataMember] public readonly CardKind[] Kinds;
         /// <summary>
@@ -26,8 +27,8 @@ namespace YugiohDeck.Core
         [DataMember] public readonly string MonsterType;
         [DataMember] public readonly int? MonsterAttack;
         [DataMember] public readonly int? MonsterDefense;
+        [DataMember] public readonly bool[] LinkMarkers;
         [DataMember] public readonly string Description;
-        [DataMember] public readonly CardImage Image;
         /// <summary>
         /// 
         /// </summary>
@@ -43,6 +44,7 @@ namespace YugiohDeck.Core
         /// <param name="image"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public Card(string name,
+            string pronunciation,
             CardLimitation limitation,
             IEnumerable<CardKind> kinds,
             string monsterLevel,
@@ -50,10 +52,11 @@ namespace YugiohDeck.Core
             string monsterType,
             int? attack,
             int? defense,
-            string description,
-            CardImage image)
+            bool[] linkMarkers,
+            string description)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Pronunciation = pronunciation ?? throw new ArgumentNullException(nameof(pronunciation));
             this.Limitation = limitation;
             this.Kinds = kinds?.ToArray() ?? throw new ArgumentNullException(nameof(kinds));
             this.MonsterLevel = monsterLevel;
@@ -61,8 +64,8 @@ namespace YugiohDeck.Core
             this.MonsterType = monsterType;
             this.MonsterAttack = attack;
             this.MonsterDefense = defense;
+            this.LinkMarkers = linkMarkers;
             this.Description = description ?? throw new ArgumentNullException(nameof(description));
-            this.Image = image ?? throw new ArgumentNullException(nameof(image));
         }
         public string GetDescriptionHeader()
         {
@@ -79,7 +82,23 @@ namespace YugiohDeck.Core
                 builder.Append(" / " + this.MonsterAttribute);
                 builder.Append(" / " + this.MonsterType);
                 builder.Append(" / ATK:" + (this.MonsterAttack?.ToString() ?? "?"));
-                builder.Append(" / DEF:" + (this.MonsterDefense?.ToString() ?? "?"));
+                if (this.Kinds.Contains(CardKind.LinkMonster))
+                {
+                    builder.Append(" / マーカー:");
+                    if (this.LinkMarkers[0]) builder.Append("左上/");
+                    if (this.LinkMarkers[1]) builder.Append("上/");
+                    if (this.LinkMarkers[2]) builder.Append("右上/");
+                    if (this.LinkMarkers[3]) builder.Append("左/");
+                    if (this.LinkMarkers[4]) builder.Append("右/");
+                    if (this.LinkMarkers[5]) builder.Append("左下/");
+                    if (this.LinkMarkers[6]) builder.Append("下/");
+                    if (this.LinkMarkers[7]) builder.Append("右下");
+                }
+                else
+                {
+                    //リンクモンスターには守備力がない
+                    builder.Append(" / DEF:" + (this.MonsterDefense?.ToString() ?? "?"));
+                }
             }
             return builder.ToString();
         }

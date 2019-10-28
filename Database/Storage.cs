@@ -64,6 +64,16 @@ namespace YugiohDeck.Database
             Directory.CreateDirectory(directory);
             File.WriteAllText(path, content);
         }
+        public static byte[] ReadBytes(IEnumerable<string> keywords)
+        {
+            var path = GetFilePath(keywords);
+            return File.ReadAllBytes(path);
+        }
+        public static void WriteBytes(byte[] content, IEnumerable<string> keywords)
+        {
+            var path = GetFilePath(keywords);
+            File.WriteAllBytes(path, content);
+        }
         /// <summary>
         /// 
         /// </summary>

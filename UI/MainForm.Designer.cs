@@ -54,7 +54,7 @@
             this.offlineSearchButton.Name = "offlineSearchButton";
             this.offlineSearchButton.Size = new System.Drawing.Size(69, 23);
             this.offlineSearchButton.TabIndex = 3;
-            this.offlineSearchButton.Text = "ローカル";
+            this.offlineSearchButton.Text = "カード名";
             this.offlineSearchButton.UseVisualStyleBackColor = true;
             this.offlineSearchButton.Click += new System.EventHandler(this.offlineSearchButton_Click);
             // 
@@ -104,7 +104,7 @@
             this.onlineSearchButton.Name = "onlineSearchButton";
             this.onlineSearchButton.Size = new System.Drawing.Size(67, 23);
             this.onlineSearchButton.TabIndex = 14;
-            this.onlineSearchButton.Text = "ウェブ";
+            this.onlineSearchButton.Text = "全文検索";
             this.onlineSearchButton.UseVisualStyleBackColor = true;
             this.onlineSearchButton.Click += new System.EventHandler(this.onlineSearchButton_Click);
             // 

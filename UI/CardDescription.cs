@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using YugiohDeck.Core;
+using YugiohDeck.Database;
 
 namespace YugiohDeck.UI
 {
@@ -27,7 +28,7 @@ namespace YugiohDeck.UI
                 this.headerLabel.ForeColor = front;
                 this.descriptionLabel.ForeColor = front;
                 this.BackColor = back;
-                this.pictureBox.Image = value.Image?.Image ?? this.pictureBox.InitialImage;
+                this.pictureBox.Image = CardImageCollection.GetImageOf(value.Name);
             }
         }
         public CardDescription()

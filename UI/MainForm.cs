@@ -4,19 +4,26 @@ using System.Linq;
 using System.Windows.Forms;
 using YugiohDeck.Core;
 using YugiohDeck.Database;
+using System.Threading.Tasks;
 
 namespace YugiohDeck.UI
 {
     public partial class MainForm : Form
     {
-        private readonly LocalCardDatabase localCardDatabase;
-        private readonly ICardDatabase onlineCardDatabase;
         private DeckView ActiveDeckView => this.deckTab.SelectedTab?.Controls[0] as DeckView;
         public MainForm()
         {
             InitializeComponent();
-            this.localCardDatabase = new LocalCardDatabase();
-            this.onlineCardDatabase = new YugiohListDotComDatabase();
+            this.messageLabel.Text = "カード データベースを読み込み中...";
+            try
+            {
+                LocalCardDatabase.LoadAllExistingCards();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "データベースの読み込みに失敗");
+            }
+            this.messageLabel.Text = "Ready";
         }
 
         private void AddSearchResult(Card card)
@@ -85,36 +92,33 @@ namespace YugiohDeck.UI
             this.ActiveDeckView?.AddCardToSideDeck(e);
         }
 
-        private void offlineSearchButton_Click(object sender, EventArgs e)
+        private async void offlineSearchButton_Click(object sender, EventArgs e)
         {
-            this.EnableAllButtons(false);
             this.messageLabel.Text = "検索中...";
+            this.EnableAllButtons(false);
             var keyword = this.keywordTextBox.Text;
-            var cards = this.localCardDatabase.SearchCards(keyword.Split(new[] { ' ', '　' }));
+            var cards = await Task.Run(() => LocalCardDatabase.SearchCardsByName(keyword.Split(new[] { ' ', '　' })));
             this.ClearSearchResult();
             foreach (var card in cards)
             {
                 this.AddSearchResult(card);
-                this.messageLabel.Text = $"ヒット:{card}";
             }
-            this.messageLabel.Text = $"検索結果:{cards.Length}件";
+            this.messageLabel.Text = "検索終了";
             this.EnableAllButtons(true);
         }
 
         private async void onlineSearchButton_Click(object sender, EventArgs e)
         {
-            this.EnableAllButtons(false);
             this.messageLabel.Text = "検索中...";
+            this.EnableAllButtons(false);
             var keyword = this.keywordTextBox.Text;
-            var cards = await this.onlineCardDatabase.SearchCardsAsync(keyword.Split(new[] { ' ', '　' }));
+            var cards = await Task.Run(() => LocalCardDatabase.SearchCardsByText(keyword.Split(new[] { ' ', '　' })));
             this.ClearSearchResult();
             foreach (var card in cards)
             {
                 this.AddSearchResult(card);
-                if (this.localCardDatabase.Exists(card.ToString())) continue;
-                this.localCardDatabase.SaveCard(card);
             }
-            this.messageLabel.Text = $"検索結果:{cards.Count}件";
+            this.messageLabel.Text = "検索終了";
             this.EnableAllButtons(true);
         }
 
@@ -164,7 +168,7 @@ namespace YugiohDeck.UI
                     this.AddDeckView(deckName, false);
                     this.messageLabel.Text = $"デッキ:{deckName}を開きました．";
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     this.messageLabel.Text = $"デッキ:{deckName}を開けませんでした:{ex.Message}";
                 }

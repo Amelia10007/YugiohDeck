@@ -17,12 +17,11 @@ namespace YugiohDeck.Core
             get => this.CardCounts.ToDictionary(c => c.Key.Name, c => c.Value);
             set
             {
-                var localCardDatabase = new LocalCardDatabase();
                 this.CardCounts = new SortedDictionary<Card, int>();
                 foreach (var pair in value)
                 {
                     var name = pair.Key;
-                    var card = localCardDatabase.SearchCard(name);
+                    var card = LocalCardDatabase.GetCardByName(name);
                     var count = pair.Value;
                     this.CardCounts.Add(card, count);
                 }

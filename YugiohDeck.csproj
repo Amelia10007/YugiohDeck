@@ -75,11 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\ICardDatabase.cs" />
+    <Compile Include="Database\CardImageCollection.cs" />
     <Compile Include="Database\LocalCardDatabase.cs" />
     <Compile Include="Database\LocalDeckDatabase.cs" />
     <Compile Include="Database\Storage.cs" />
-    <Compile Include="Database\YugiohListDotComDatabase.cs" />
     <Compile Include="Serialization\Json.cs" />
     <Compile Include="UI\CardColor.cs" />
     <Compile Include="UI\CardDescription.cs">
@@ -88,7 +87,6 @@
     <Compile Include="UI\CardDescription.Designer.cs">
       <DependentUpon>CardDescription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\CardImage.cs" />
     <Compile Include="Core\CardLimitation.cs" />
     <Compile Include="UI\CardView.cs">
       <SubType>UserControl</SubType>

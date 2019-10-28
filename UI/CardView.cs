@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using YugiohDeck.Core;
+using YugiohDeck.Database;
 
 namespace YugiohDeck.UI
 {
@@ -16,7 +17,7 @@ namespace YugiohDeck.UI
             set
             {
                 this.card = value;
-                this.pictureBox.Image = value.Image.Image;
+                this.pictureBox.Image = CardImageCollection.GetImageOf(value.Name);
             }
         }
         public CardView()

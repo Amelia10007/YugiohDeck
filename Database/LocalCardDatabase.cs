@@ -1,92 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using YugiohDeck.Core;
 using YugiohDeck.Serialization;
+using System.IO;
 
 namespace YugiohDeck.Database
 {
-    class LocalCardDatabase
+    static class LocalCardDatabase
     {
         private static readonly string fileExtension = ".json";
-        private static readonly string cardKeyword = "card";
-        private readonly IDictionary<string, Card> cardMemo;
-        public LocalCardDatabase()
+        private static readonly IDictionary<string, Card> cards = new Dictionary<string, Card>();
+        public static void LoadAllExistingCards()
         {
-            this.cardMemo = new Dictionary<string, Card>();
-        }
-        public bool Exists(string cardName)
-        {
-            var memoExistance = this.cardMemo.ContainsKey(cardName);
-            if (memoExistance) return true;
-            var keywords = GetKeywords(cardName);
-            return Storage.Exists(keywords);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cardName"></param>
-        /// <returns></returns>
-        /// <exception cref="System.IO.PathTooLongException"></exception>
-        /// <exception cref="System.IO.IOException"></exception>
-        /// <exception cref="System.IO.FileNotFoundException"></exception>
-        public Card SearchCard(string cardName)
-        {
-            var keywords = GetKeywords(cardName);
-            var content = Storage.ReadString(keywords);
-            var card = Json.Deserialize<Card>(content);
-            this.AddCardMemo(card);
-            return card;
-        }
-        public Card[] SearchCards(string[] keywords)
-        {
+            cards.Clear();
             //
-            var mathedMemoCards = this.cardMemo
-                .Where(pair => MatchKeywords(keywords, pair.Key))
-                .Select(pair => pair.Value)
-                .ToArray();
+            var files = Storage.EnumerateExistingFiles(false, new[] { "card", "text" });
+            var existingCards =
+              from file in files
+              let extension = new string(Path.GetExtension(file.Last()).ToArray()).ToLower()
+              where extension == fileExtension
+              let content = Storage.ReadString(file)
+              let card = Json.Deserialize<Card>(content)
+              select card;
             //
-            var files = Storage.EnumerateExistingFiles(false, cardKeyword.ToEnumerable());
-            var storageCards =
-              (from file in files
-               let cardNameWithExtension = file.Last()
-               let cardName = cardNameWithExtension.Replace(fileExtension, "")
-               where MatchKeywords(keywords, cardName)
-               where !this.cardMemo.ContainsKey(cardName)
-               let content = Storage.ReadString(file)
-               let card = Json.Deserialize<Card>(content)
-               select card)
-              .ToArray();
-            //
-            foreach (var card in storageCards)
+            foreach (var card in existingCards)
             {
-                this.AddCardMemo(card);
+                cards.Add(card.Name, card);
             }
-            return storageCards.Concat(mathedMemoCards).ToArray();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="card"></param>
-        /// <exception cref="System.Runtime.Serialization.InvalidDataContractException"></exception>
-        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="System.IO.PathTooLongException"></exception>
-        /// <exception cref="System.IO.IOException"></exception>
-        public void SaveCard(Card card)
+        public static Card GetCardByName(string cardName)
         {
-            var json = Json.Serialize(card, false);
-            var keywords = GetKeywords(card.Name);
-            Storage.WriteString(json.ToString(), keywords);
-            if (this.cardMemo.ContainsKey(card.Name)) this.cardMemo[card.Name] = card;
-            else this.cardMemo.Add(card.Name, card);
+            if (!cards.ContainsKey(cardName))
+            {
+
+            }
+            return cards[cardName];
         }
-        private void AddCardMemo(Card card)
+        public static IEnumerable<Card> SearchCardsByName(string[] nameKeywords)
         {
-            if (this.cardMemo.ContainsKey(card.Name)) this.cardMemo[card.Name] = card;
-            else this.cardMemo.Add(card.Name, card);
+            foreach (var pair in cards)
+            {
+                var name = pair.Key;
+                if (nameKeywords.Any(keyword => !name.Contains(keyword)))
+                {
+                    continue;
+                }
+                yield return pair.Value;
+            }
         }
-        private static string[] GetKeywords(string cardName) => new[] { cardKeyword, cardName + fileExtension };
-        private static bool MatchKeywords(string[] keywords, string cardName) => keywords.All(k => cardName.Contains(k));
+        public static IEnumerable<Card> SearchCardsByText(string[] keywords)
+        {
+            foreach (var card in cards.Values)
+            {
+                var text = card.Name + card.Pronunciation + card.Description;
+                if (keywords.Any(keyword => !text.Contains(keyword)))
+                {
+                    continue;
+                }
+                yield return card;
+            }
+        }
     }
 }
