@@ -5,6 +5,18 @@ namespace YugiohDeck
 {
     static class Extension
     {
+        public static T MapIf<T>(this T value, bool condition, Func<T, T> map)
+        {
+            if (condition)
+            {
+                return value;
+            }
+            else
+            {
+                return map(value);
+            }
+        }
+
         public static IEnumerable<T> ToEnumerable<T>(this T item)
         {
             yield return item;
@@ -20,7 +32,7 @@ namespace YugiohDeck
             return -1;
         }
 
-        public static T TryGet<T,TAllowException>(Func<T> getter, T defaultValue) where TAllowException:Exception
+        public static T TryGet<T, TAllowException>(Func<T> getter, T defaultValue) where TAllowException : Exception
         {
             try
             {

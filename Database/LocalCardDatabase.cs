@@ -30,10 +30,6 @@ namespace YugiohDeck.Database
         }
         public static Card GetCardByName(string cardName)
         {
-            if (!cards.ContainsKey(cardName))
-            {
-
-            }
             return cards[cardName];
         }
         public static IEnumerable<Card> SearchCardsByName(string[] nameKeywords)

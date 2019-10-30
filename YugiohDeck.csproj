@@ -75,9 +75,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ICardDisplay.cs" />
+    <Compile Include="Core\Option.cs" />
+    <Compile Include="Core\Range.cs" />
     <Compile Include="Database\CardImageCollection.cs" />
     <Compile Include="Database\LocalCardDatabase.cs" />
     <Compile Include="Database\LocalDeckDatabase.cs" />
+    <Compile Include="Database\MonsterBattleStatusRange.cs" />
+    <Compile Include="Database\SearchCondition.cs" />
     <Compile Include="Database\Storage.cs" />
     <Compile Include="Serialization\Json.cs" />
     <Compile Include="UI\CardColor.cs" />
