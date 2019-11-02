@@ -30,6 +30,32 @@ namespace YugiohDeck.Core
         public static readonly CardKind NormalTrap = new CardKind("通常罠");
         public static readonly CardKind ContinuousTrap = new CardKind("永続罠");
         public static readonly CardKind CounterTrap = new CardKind("カウンター罠");
+        public static readonly CardKind[] CardKinds = new[]
+        {
+            NormalMonster,
+            EffectMonster,
+            DualMonster,
+            SpiritMonster,
+            TunarMonster,
+            ReverseMonster,
+            ToonMonster,
+            SpecialSummonMonster,
+            RitualMonster,
+            FusionMonster,
+            SynchroMonster,
+            XyzMonster,
+            PendulumMonster,
+            LinkMonster,
+            NormalSpell,
+            RitualSpell,
+            EquipSpell,
+            FieldSpell,
+            ContinuousSpell,
+            QuickSpell,
+            NormalTrap,
+            ContinuousTrap,
+            CounterTrap,
+        };
         private static readonly CardKind[] monsterCardKinds = new[]
         {
             NormalMonster,
@@ -75,7 +101,7 @@ namespace YugiohDeck.Core
         public bool IsSpell => spellCardKinds.Any(k => k.kind == this.kind);
         public bool IsTrap => trapCardKinds.Any(k => k.kind == this.kind);
         private CardKind(string kind) => this.kind = kind;
-        public bool Equals(CardKind other) => this.kind.Equals(other.kind);
+        public bool Equals(CardKind other) => this.kind.Equals(other?.kind);
         public int CompareTo(CardKind other) => this.GetComparisonOrder().CompareTo(other.GetComparisonOrder());
         public override bool Equals(object obj) => this.Equals(obj as CardKind);
         public override int GetHashCode() => this.kind.GetHashCode();

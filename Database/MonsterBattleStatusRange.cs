@@ -9,47 +9,28 @@ namespace YugiohDeck.Database
 {
     class MonsterBattleStatusRange
     {
-        private readonly Option<Range<int>> range;
+        public Option<Range<int>> Range;
         /// <summary>
         /// ステータス'?'とマッチするか．
         /// </summary>
-        private readonly bool allowUndefinedBattleStatus;
-        
-        private MonsterBattleStatusRange(Option<Range<int>> range,bool allowUndefinedBattleStatus)
-        {
-            this.range = range;
-            this.allowUndefinedBattleStatus = allowUndefinedBattleStatus;
-        }
+        public bool AllowUndefinedBattleStatus;
 
         public bool Matches(int? battleStatus)
         {
             if (battleStatus.HasValue)
             {
-                if (this.range.IsValid)
+                //ステータスが固定
+                if (this.Range.IsValid)
                 {
-                    return this.range.Unwrap().Contains(battleStatus.Value);
+                    return this.Range.Unwrap().Contains(battleStatus.Value);
                 }
                 return false;
             }
             else
             {
-                return this.allowUndefinedBattleStatus;
+                //ステータスが'?'
+                return this.AllowUndefinedBattleStatus;
             }
-        }
-
-        public static MonsterBattleStatusRange FromRange(Range<int> range)
-        {
-            return new MonsterBattleStatusRange(Option<Range<int>>.Some(range), false);
-        }
-
-        public static MonsterBattleStatusRange FromRangeWithUndefinedBattleStatus(Range<int> range)
-        {
-            return new MonsterBattleStatusRange(Option<Range<int>>.Some(range), true);
-        }
-
-        public static MonsterBattleStatusRange OnlyUndefinedBattleStatus()
-        {
-            return new MonsterBattleStatusRange(Option<Range<int>>.None, true);
         }
     }
 }

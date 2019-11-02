@@ -16,7 +16,7 @@ namespace YugiohDeck.Database
     class CardKindSearchCondition
     {
         public IReadOnlyCollection<CardKind> CardKinds;
-        public SearchConditionCombination CardKindsCombination;
+        public SearchConditionCombination Combination;
 
         public bool Matches(IEnumerable<CardKind> cardKinds)
         {
@@ -24,14 +24,47 @@ namespace YugiohDeck.Database
             {
                 return true;
             }
-            switch (this.CardKindsCombination)
+            switch (this.Combination)
             {
                 case SearchConditionCombination.And:
-                    return cardKinds.All(c => this.CardKinds.Contains(c));
+                    return this.CardKinds.All(c => cardKinds.Contains(c));
                 case SearchConditionCombination.Or:
-                    return cardKinds.Any(c => this.CardKinds.Contains(c));
+                    return this.CardKinds.Any(c => cardKinds.Contains(c));
+                default:
+                    throw new InvalidOperationException("Should not reach here");
             }
-            throw new InvalidOperationException("Should not reach here");
+        }
+    }
+
+    class TextSearchCondition
+    {
+        public IReadOnlyCollection<string> Words;
+        public SearchConditionCombination Combination;
+        public virtual bool Matches(string source)
+        {
+            switch (this.Combination)
+            {
+                case SearchConditionCombination.And:
+                    return this.Words.All(word => source.Contains(word));
+                case SearchConditionCombination.Or:
+                    return this.Words.Any(word => source.Contains(word));
+                default:
+                    throw new InvalidOperationException("Should not reach here");
+            }
+        }
+    }
+
+    class PronunciationSearchCondition : TextSearchCondition
+    {
+        public override bool Matches(string source)
+        {
+            var sourceKatakana = ToKatakana(source);
+            this.Words = this.Words.Select(word => ToKatakana(word)).ToArray();
+            return base.Matches(sourceKatakana);
+        }
+        private static string ToKatakana(string source)
+        {
+            return new string(source.Select(c => (c >= 'ぁ' && c <= 'ゖ') ? (char)(c + 'ァ' - 'ぁ') : c).ToArray());
         }
     }
 
@@ -40,7 +73,7 @@ namespace YugiohDeck.Database
         public Range<int> Range;
         public bool Matches(string monsterLevel)
         {
-            if(!int.TryParse(monsterLevel, out var level))
+            if (!int.TryParse(monsterLevel, out var level))
             {
                 return false;
             }
@@ -51,26 +84,45 @@ namespace YugiohDeck.Database
     class SearchCondition
     {
         public Option<CardKindSearchCondition> CardKindCondition;
-        public Option<string> Name;
-        public Option<string> Description;
+        public Option<TextSearchCondition> NameCondition;
+        public Option<TextSearchCondition> DescriptionCondition;
+        public Option<PronunciationSearchCondition> PronunciationCondition;
         public Option<MonsterLevelSearchCondition> MonsterLevel;
         public Option<string> MonsterAttribute;
         public Option<string> MonsterType;
         public Option<MonsterBattleStatusRange> MonsterAttack;
         public Option<MonsterBattleStatusRange> MonsterDefence;
+        public int MaxResultCount;
 
         public IEnumerable<Card> Matches(IEnumerable<Card> cards)
         {
             return cards
-                .MapIf(this.CardKindCondition.IsValid,
-                    cs => cs.Where(c => this.CardKindCondition.Unwrap().Matches(c.Kinds)))
-                .MapIf(this.Name.IsValid, cs => cs.Where(c => c.Name.Contains(this.Name.Unwrap())))
-                .MapIf(this.Description.IsValid, cs => cs.Where(c => c.Description.Contains(this.Description.Unwrap())))
-                .MapIf(this.MonsterLevel.IsValid, cs => cs.Where(c => this.MonsterLevel.Unwrap().Matches(c.MonsterLevel)))
-                .MapIf(this.MonsterAttribute.IsValid, cs => cs.Where(c => c.MonsterAttribute.Contains(this.MonsterAttribute.Unwrap())))
-                .MapIf(this.MonsterType.IsValid, cs => cs.Where(c => c.MonsterType.Contains(this.MonsterType.Unwrap())))
-                .MapIf(this.MonsterAttack.IsValid, cs => cs.Where(c => this.MonsterAttack.Unwrap().Matches(c.MonsterAttack)))
-                .MapIf(this.MonsterDefence.IsValid, cs => cs.Where(c => this.MonsterDefence.Unwrap().Matches(c.MonsterDefense)));
+                .WhereOrPass(this.CardKindCondition, (card, condition) => condition.Matches(card.Kinds))
+                .WhereOrPass(this.NameCondition, (card, condition) => condition.Matches(card.Name))
+                .WhereOrPass(this.DescriptionCondition, (card, condition) => condition.Matches(card.Description))
+                .WhereOrPass(this.PronunciationCondition, (card, condition) => condition.Matches(card.Pronunciation))
+                .WhereOrPass(this.MonsterLevel, (card, condition) => condition.Matches(card.MonsterLevel))
+                .WhereOrPass(this.MonsterAttribute, (card, condition) => card.MonsterAttribute.Contains(condition))
+                .WhereOrPass(this.MonsterType, (card, condition) => card.MonsterType.Contains(condition))
+                .WhereOrPass(this.MonsterAttack, (card, condition) => condition.Matches(card.MonsterAttack))
+                .WhereOrPass(this.MonsterDefence, (card, condition) => condition.Matches(card.MonsterDefense))
+                .Take(MaxResultCount);
+        }
+    }
+
+    static class ExtensionForCardSearch
+    {
+        public static IEnumerable<T> WhereOrPass<T, U>(this IEnumerable<T> sequence, Option<U> option, Func<T, U, bool> predicateForSome)
+        {
+            if (option.IsValid)
+            {
+                var value = option.Unwrap();
+                return sequence.Where(item => predicateForSome(item, value));
+            }
+            else
+            {
+                return sequence;
+            }
         }
     }
 }

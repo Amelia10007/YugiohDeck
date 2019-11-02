@@ -10,20 +10,17 @@ namespace YugiohDeck.UI
 {
     public partial class MainForm : Form
     {
+        private readonly SearchConditionForm searchConditionForm;
         private DeckView ActiveDeckView => this.deckTab.SelectedTab?.Controls[0] as DeckView;
         public MainForm()
         {
             InitializeComponent();
-            this.messageLabel.Text = "カード データベースを読み込み中...";
-            try
-            {
-                LocalCardDatabase.LoadAllExistingCards();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "データベースの読み込みに失敗");
-            }
-            this.messageLabel.Text = "Ready";
+            //検索用ウィンドウも同時に作る
+            this.searchConditionForm = new SearchConditionForm();
+            this.searchConditionForm.SearchButtonClicked += this.PerformSearch;
+            this.searchConditionForm.Show();
+            //
+            this.Shown += this.ReadyForEditingAsync;
         }
 
         private void AddSearchResult(Card card)
@@ -71,10 +68,42 @@ namespace YugiohDeck.UI
 
         private void EnableAllButtons(bool enabled)
         {
-            this.offlineSearchButton.Enabled = enabled;
-            this.onlineSearchButton.Enabled = enabled;
             this.createButton.Enabled = enabled;
             this.openButton.Enabled = enabled;
+            this.searchConditionForm.AllButtonsEnabled = enabled;
+        }
+
+        private async void ReadyForEditingAsync(object sender, EventArgs e)
+        {
+            this.EnableAllButtons(false);
+            this.messageLabel.Text = "カード データベースを読み込み中...";
+            await Task.Run(() =>
+            {
+                try
+                {
+                    LocalCardDatabase.LoadAllExistingCards();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "データベースの読み込みに失敗");
+                }
+            });
+            this.messageLabel.Text = "Ready";
+            this.EnableAllButtons(true);
+        }
+
+        private async void PerformSearch(object sender, SearchCondition searchCondition)
+        {
+            this.messageLabel.Text = "検索中...";
+            this.EnableAllButtons(false);
+            this.ClearSearchResult();
+            var matchedCards = (await Task.Run(() => LocalCardDatabase.SearchCardsByCondition(searchCondition))).ToArray();
+            this.messageLabel.Text = $"{matchedCards.Length}件ヒット";
+            foreach (var card in matchedCards)
+            {
+                this.AddSearchResult(card);
+            }
+            this.EnableAllButtons(true);
         }
 
         private void MainDeckAddButton_Click(object sender, Card e)
@@ -90,36 +119,6 @@ namespace YugiohDeck.UI
         private void SideDeckAddButton_Click(object sender, Card e)
         {
             this.ActiveDeckView?.AddCardToSideDeck(e);
-        }
-
-        private async void offlineSearchButton_Click(object sender, EventArgs e)
-        {
-            this.messageLabel.Text = "検索中...";
-            this.EnableAllButtons(false);
-            var keyword = this.keywordTextBox.Text;
-            var cards = await Task.Run(() => LocalCardDatabase.SearchCardsByName(keyword.Split(new[] { ' ', '　' })));
-            this.ClearSearchResult();
-            foreach (var card in cards)
-            {
-                this.AddSearchResult(card);
-            }
-            this.messageLabel.Text = "検索終了";
-            this.EnableAllButtons(true);
-        }
-
-        private async void onlineSearchButton_Click(object sender, EventArgs e)
-        {
-            this.messageLabel.Text = "検索中...";
-            this.EnableAllButtons(false);
-            var keyword = this.keywordTextBox.Text;
-            var cards = await Task.Run(() => LocalCardDatabase.SearchCardsByText(keyword.Split(new[] { ' ', '　' })));
-            this.ClearSearchResult();
-            foreach (var card in cards)
-            {
-                this.AddSearchResult(card);
-            }
-            this.messageLabel.Text = "検索終了";
-            this.EnableAllButtons(true);
         }
 
         private void createButton_Click(object sender, EventArgs e)

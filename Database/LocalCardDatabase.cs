@@ -28,33 +28,14 @@ namespace YugiohDeck.Database
                 cards.Add(card.Name, card);
             }
         }
+        public static IEnumerable<Card> SearchCardsByCondition(SearchCondition searchCondition)
+        {
+            return searchCondition.Matches(cards.Values);
+        }
+
         public static Card GetCardByName(string cardName)
         {
             return cards[cardName];
-        }
-        public static IEnumerable<Card> SearchCardsByName(string[] nameKeywords)
-        {
-            foreach (var pair in cards)
-            {
-                var name = pair.Key;
-                if (nameKeywords.Any(keyword => !name.Contains(keyword)))
-                {
-                    continue;
-                }
-                yield return pair.Value;
-            }
-        }
-        public static IEnumerable<Card> SearchCardsByText(string[] keywords)
-        {
-            foreach (var card in cards.Values)
-            {
-                var text = card.Name + card.Pronunciation + card.Description;
-                if (keywords.Any(keyword => !text.Contains(keyword)))
-                {
-                    continue;
-                }
-                yield return card;
-            }
         }
     }
 }

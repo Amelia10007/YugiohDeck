@@ -71,6 +71,10 @@ namespace YugiohDeck.Core
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(this.Name);
+            if (this.Name != this.Pronunciation)
+            {
+                builder.Append($" ({this.Pronunciation})");
+            }
             if (this.Limitation.HasLimit) builder.Append($"【{this.Limitation}】");
             foreach (var kind in this.Kinds)
             {
