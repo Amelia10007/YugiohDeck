@@ -17,7 +17,7 @@ namespace YugiohDeck.Core
         }
         public bool Contains(T value)
         {
-            return this.Min.CompareTo(value) < 0 && value.CompareTo(this.Max) < 1;
+            return this.Min.CompareTo(value) <= 0 && value.CompareTo(this.Max) <= 0;
         }
     }
 }
