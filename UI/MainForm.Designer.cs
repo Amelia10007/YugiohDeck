@@ -690,7 +690,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Yugioh deck editor 1.0";
+            this.Text = "Yugioh deck editor 1.0.1";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel.ResumeLayout(false);

@@ -15,6 +15,31 @@ namespace YugiohDeck.UI
         public MainForm()
         {
             InitializeComponent();
+            //検索タブの初期化
+            foreach (var kindListBox in this.kindFlowLayoutPanel.Controls)
+            {
+                if (!(kindListBox is ListBox))
+                {
+                    throw new InvalidOperationException($"All children must be {typeof(ListBox)}");
+                }
+                var asListBox = kindListBox as ListBox;
+                asListBox.Items.Clear();
+                asListBox.Items.Add(listBoxNoSelectedItem);
+                foreach (var kind in CardKind.CardKinds)
+                {
+                    asListBox.Items.Add(kind);
+                }
+            }
+            //
+            this.monsterAttributeListBox.Items.Clear();
+            this.monsterAttributeListBox.Items.AddRange(new[] { listBoxNoSelectedItem, "光", "闇", "炎", "水", "地", "風", "神" });
+            //
+            this.monsterTypeListBox.Items.Clear();
+            this.monsterTypeListBox.Items.AddRange(new[]
+            {
+                listBoxNoSelectedItem, "ドラゴン","魔法使い","アンデット","戦士","獣戦士","獣","鳥獣","悪魔","天使","昆虫","恐竜","爬虫類","魚","海竜","機械","雷","水","炎","岩石","植物","サイキック","サイバース","幻竜","幻神獣","創造神"
+            });
+            //
             this.Shown += this.ReadyForEditingAsync;
         }
 
