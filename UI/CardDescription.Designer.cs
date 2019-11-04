@@ -46,7 +46,7 @@
             // 
             this.headerLabel.Location = new System.Drawing.Point(3, 0);
             this.headerLabel.Name = "headerLabel";
-            this.headerLabel.Size = new System.Drawing.Size(346, 26);
+            this.headerLabel.Size = new System.Drawing.Size(444, 26);
             this.headerLabel.TabIndex = 2;
             this.headerLabel.Text = "カード名";
             // 
@@ -64,6 +64,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.headerLabel);
