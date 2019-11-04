@@ -47,21 +47,20 @@
             // 
             this.drawButton.Location = new System.Drawing.Point(119, 12);
             this.drawButton.Name = "drawButton";
-            this.drawButton.Size = new System.Drawing.Size(75, 23);
+            this.drawButton.Size = new System.Drawing.Size(95, 23);
             this.drawButton.TabIndex = 1;
-            this.drawButton.Text = "枚ドロー！";
+            this.drawButton.Text = "枚新規ドロー！";
             this.drawButton.UseVisualStyleBackColor = true;
             this.drawButton.Click += new System.EventHandler(this.drawButton_Click);
             // 
             // additionalDrawButton
             // 
-            this.additionalDrawButton.Location = new System.Drawing.Point(200, 12);
+            this.additionalDrawButton.Location = new System.Drawing.Point(220, 12);
             this.additionalDrawButton.Name = "additionalDrawButton";
-            this.additionalDrawButton.Size = new System.Drawing.Size(75, 23);
+            this.additionalDrawButton.Size = new System.Drawing.Size(103, 23);
             this.additionalDrawButton.TabIndex = 2;
-            this.additionalDrawButton.Text = "1枚ドロー！";
+            this.additionalDrawButton.Text = "1枚追加ドロー！";
             this.additionalDrawButton.UseVisualStyleBackColor = true;
-            this.additionalDrawButton.Click += new System.EventHandler(this.additionalDrawButton_Click);
             // 
             // panel
             // 

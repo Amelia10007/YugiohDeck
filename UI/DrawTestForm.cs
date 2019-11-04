@@ -54,10 +54,5 @@ namespace YugiohDeck.UI
                 this.DrawRandomCard();
             }
         }
-
-        private void additionalDrawButton_Click(object sender, EventArgs e)
-        {
-            this.DrawRandomCard();
-        }
     }
 }
