@@ -49,10 +49,15 @@ namespace YugiohDeck.UI
                 this.messageLabel.Text = $"'{this.drawCountTextBox.Text}'を整数に変換できません．";
                 return;
             }
-            foreach (var _ in Enumerable.Range(0,drawCount))
+            foreach (var _ in Enumerable.Range(0, drawCount))
             {
                 this.DrawRandomCard();
             }
+        }
+
+        private void additionalDrawButton_Click(object sender, EventArgs e)
+        {
+            this.DrawRandomCard();
         }
     }
 }

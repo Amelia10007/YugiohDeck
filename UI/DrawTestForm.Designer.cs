@@ -61,6 +61,7 @@
             this.additionalDrawButton.TabIndex = 2;
             this.additionalDrawButton.Text = "1枚追加ドロー！";
             this.additionalDrawButton.UseVisualStyleBackColor = true;
+            this.additionalDrawButton.Click += new System.EventHandler(this.additionalDrawButton_Click);
             // 
             // panel
             // 
