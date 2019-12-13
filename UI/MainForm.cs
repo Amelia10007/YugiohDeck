@@ -102,7 +102,7 @@ namespace YugiohDeck.UI
             {
                 try
                 {
-                    LocalCardDatabase.LoadAllExistingCards();
+                    LocalCardDatabase.LoadAllExistingCards(s => this.messageLabel.Text = s);
                 }
                 catch (Exception ex)
                 {

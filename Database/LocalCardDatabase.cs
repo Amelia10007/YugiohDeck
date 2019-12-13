@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using YugiohDeck.Core;
 using YugiohDeck.Serialization;
@@ -10,7 +11,7 @@ namespace YugiohDeck.Database
     {
         private static readonly string fileExtension = ".json";
         private static readonly IDictionary<string, Card> cards = new Dictionary<string, Card>();
-        public static void LoadAllExistingCards()
+        public static void LoadAllExistingCards(Action<string> notification)
         {
             cards.Clear();
             //
@@ -23,9 +24,11 @@ namespace YugiohDeck.Database
               let card = Json.Deserialize<Card>(content)
               select card;
             //
+            var i = 0;
             foreach (var card in existingCards)
             {
                 cards.Add(card.Name, card);
+                notification?.Invoke($"[{i++}]: Load {card.Name}");
             }
         }
         public static IEnumerable<Card> SearchCardsByCondition(SearchCondition searchCondition)

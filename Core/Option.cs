@@ -19,6 +19,20 @@ namespace YugiohDeck.Core
             this.value = value;
         }
 
+        public bool TryUnwrap(out T value)
+        {
+            if (this.IsValid)
+            {
+                value = this.value;
+                return true;
+            }
+            else
+            {
+                value = default;
+                return false;
+            }
+        }
+
         public T Unwrap()
         {
             if (!this.IsValid)
