@@ -5,16 +5,19 @@ using System.Windows.Forms;
 using YugiohDeck.Core;
 using YugiohDeck.Database;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace YugiohDeck.UI
 {
     public partial class MainForm : Form
     {
+        private readonly SynchronizationContext uiContext;
         private static readonly string listBoxNoSelectedItem = "None";
         private DeckView ActiveDeckView => this.deckTab.SelectedTab?.Controls[0] as DeckView;
         public MainForm()
         {
             InitializeComponent();
+            this.uiContext = SynchronizationContext.Current;
             //検索タブの初期化
             foreach (var kindListBox in this.kindFlowLayoutPanel.Controls)
             {
@@ -41,6 +44,11 @@ namespace YugiohDeck.UI
             });
             //
             this.Shown += this.ReadyForEditingAsync;
+        }
+
+        private void SetMessageLabel(string message)
+        {
+            this.uiContext.Post(_ => { this.messageLabel.Text = message; }, null);
         }
 
         private void AddSearchResult(Card card)
@@ -97,19 +105,18 @@ namespace YugiohDeck.UI
         private async void ReadyForEditingAsync(object sender, EventArgs e)
         {
             this.EnableAllButtons(false);
-            this.messageLabel.Text = "カード データベースを読み込み中...";
             await Task.Run(() =>
             {
                 try
                 {
-                    LocalCardDatabase.LoadAllExistingCards(s => this.messageLabel.Text = s);
+                    LocalCardDatabase.LoadAllExistingCards(s => this.SetMessageLabel(s));
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "データベースの読み込みに失敗");
                 }
             });
-            this.messageLabel.Text = "Ready";
+            this.SetMessageLabel("Ready");
             this.EnableAllButtons(true);
         }
 
@@ -365,7 +372,7 @@ namespace YugiohDeck.UI
 
         private async void searchButton_Click(object sender, EventArgs e)
         {
-            this.messageLabel.Text = "検索中...";
+            this.SetMessageLabel("検索中...");
             this.EnableAllButtons(false);
             var searchCondition = new SearchCondition()
             {
@@ -382,7 +389,7 @@ namespace YugiohDeck.UI
             };
             this.ClearSearchResult();
             var matchedCards = (await Task.Run(() => LocalCardDatabase.SearchCardsByCondition(searchCondition))).ToArray();
-            this.messageLabel.Text = $"{matchedCards.Length}件ヒット";
+            this.SetMessageLabel($"{matchedCards.Length}件ヒット");
             foreach (var card in matchedCards)
             {
                 this.AddSearchResult(card);
