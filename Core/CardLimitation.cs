@@ -14,7 +14,7 @@ namespace YugiohDeck.Core
         public bool HasLimit => this.MaxCount < Unlimited.MaxCount;
         private CardLimitation(int maxCount) => this.MaxCount = maxCount;
         public bool Allow(int count) => this.MaxCount >= count;
-        public bool Equals(CardLimitation other) => ReferenceEquals(this, other);
+        public bool Equals(CardLimitation other) => this.MaxCount.Equals(other.MaxCount);
         public override string ToString()
         {
             switch (this.MaxCount)
