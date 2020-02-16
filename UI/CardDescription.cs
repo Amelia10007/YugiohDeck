@@ -27,7 +27,14 @@ namespace YugiohDeck.UI
                 this.headerLabel.ForeColor = front;
                 this.descriptionLabel.ForeColor = front;
                 this.BackColor = back;
-                this.pictureBox.Image = CardImageCollection.GetImageOf(value.IdentityShortName);
+                try
+                {
+                    this.pictureBox.Image = CardImageCollection.GetImageOf(value.IdentityShortName);
+                }
+                catch
+                {
+                    this.pictureBox.Image = this.pictureBox.ErrorImage;
+                }
             }
         }
         public CardDescription()

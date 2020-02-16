@@ -82,7 +82,23 @@ namespace YugiohDeck.UI
 
         private void AddDeckView(string deckName, bool createNew)
         {
-            var deck = createNew ? new Deck(deckName) : Storage.ReadDeck(deckName);
+            Deck deck;
+            if (createNew)
+            {
+                deck = new Deck(deckName);
+            }
+            else
+            {
+                try
+                {
+                    deck = Storage.ReadDeck(deckName);
+                }
+                catch (Exception ex)
+                {
+                    this.messageLabel.Text = $"デッキ:{deckName}を読み込めませんでした:{ex.Message}";
+                    return;
+                }
+            }
             var deckView = new DeckView(this.limitRegulationDatabase) { Deck = deck };
             var tabPage = new TabPage(deckName);
             deckView.DescriptionRequested += (_, card) => this.ShowCardDescription(card);
@@ -377,13 +393,13 @@ namespace YugiohDeck.UI
             inputForm.ShowDialog(this.ParentForm);
             if (inputForm.InputResult != DialogResult.OK) return;
             var deckName = inputForm.InputText;
-            if (Storage.EnumerateDecknames().Contains(deckName))
-            {
-                MessageBox.Show($"デッキ \'{deckName}\'は既に存在します．");
-                return;
-            }
             try
             {
+                if (Storage.EnumerateDecknames().Contains(deckName))
+                {
+                    MessageBox.Show($"デッキ \'{deckName}\'は既に存在します．");
+                    return;
+                }
                 this.AddDeckView(deckName, true);
                 this.messageLabel.Text = $"デッキ:{deckName}を作成しました．";
             }
@@ -401,7 +417,16 @@ namespace YugiohDeck.UI
                 var deckName = ((page as TabPage)?.Controls[0] as DeckView)?.Deck.Name;
                 if (deckName != null) openedDeckNames.Add(deckName);
             }
-            var selectForm = new DeckSelectForm() { DeckNames = Storage.EnumerateDecknames().ToArray() };
+            DeckSelectForm selectForm;
+            try
+            {
+                selectForm = new DeckSelectForm() { DeckNames = Storage.EnumerateDecknames().ToArray() };
+            }
+            catch (Exception ex)
+            {
+                this.messageLabel.Text = $"デッキ選択フォームを開けませんでした:{ex.Message}";
+                return;
+            }
             var result = selectForm.ShowDialog();
             if (result != DialogResult.OK) return;
             var selectedDeckNames = selectForm.SelectedDeckNames;
@@ -416,7 +441,6 @@ namespace YugiohDeck.UI
                 catch (Exception ex)
                 {
                     this.messageLabel.Text = $"デッキ:{deckName}を開けませんでした:{ex.Message}";
-                    throw;
                 }
             }
         }

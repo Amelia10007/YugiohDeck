@@ -38,9 +38,9 @@
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.defenceCheckBox = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.levelMaxUpDown = new System.Windows.Forms.NumericUpDown();
             this.levelRangeLabel = new System.Windows.Forms.Label();
             this.levelMinUpDown = new System.Windows.Forms.NumericUpDown();
+            this.levelMaxUpDown = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.monsterDefenceMinUpDown = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
@@ -70,20 +70,20 @@
             this.resultCountUpDown = new System.Windows.Forms.NumericUpDown();
             this.searchButton = new System.Windows.Forms.Button();
             this.conditionClearButton = new System.Windows.Forms.Button();
+            this.levelRankLinkGroupBox = new System.Windows.Forms.GroupBox();
+            this.linkRadioButton = new System.Windows.Forms.RadioButton();
+            this.rankRadioButton = new System.Windows.Forms.RadioButton();
+            this.levelRadioButton = new System.Windows.Forms.RadioButton();
+            this.nonRadioButton = new System.Windows.Forms.RadioButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.searchResultPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.cardDescription = new YugiohDeck.UI.CardDescription();
-            this.levelRankLinkGroupBox = new System.Windows.Forms.GroupBox();
-            this.nonRadioButton = new System.Windows.Forms.RadioButton();
-            this.levelRadioButton = new System.Windows.Forms.RadioButton();
-            this.rankRadioButton = new System.Windows.Forms.RadioButton();
-            this.linkRadioButton = new System.Windows.Forms.RadioButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.levelMaxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelMinUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.levelMaxUpDown)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monsterDefenceMinUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.monsterDefenceMaxUpDown)).BeginInit();
@@ -92,8 +92,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.monsterAttackMinUpDown)).BeginInit();
             this.kindFlowLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultCountUpDown)).BeginInit();
-            this.tabPage2.SuspendLayout();
             this.levelRankLinkGroupBox.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // openButton
@@ -192,11 +192,11 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 127F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(700, 484);
@@ -207,7 +207,7 @@
             // 
             this.defenceCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.defenceCheckBox.AutoSize = true;
-            this.defenceCheckBox.Location = new System.Drawing.Point(4, 390);
+            this.defenceCheckBox.Location = new System.Drawing.Point(4, 432);
             this.defenceCheckBox.Name = "defenceCheckBox";
             this.defenceCheckBox.Size = new System.Drawing.Size(84, 16);
             this.defenceCheckBox.TabIndex = 22;
@@ -220,43 +220,21 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel3.Controls.Add(this.levelRangeLabel, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.levelMinUpDown, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.levelMaxUpDown, 2, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(211, 187);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(211, 186);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(96, 26);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(191, 26);
             this.tableLayoutPanel3.TabIndex = 8;
-            // 
-            // levelMaxUpDown
-            // 
-            this.levelMaxUpDown.Location = new System.Drawing.Point(62, 3);
-            this.levelMaxUpDown.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-            this.levelMaxUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.levelMaxUpDown.Name = "levelMaxUpDown";
-            this.levelMaxUpDown.Size = new System.Drawing.Size(31, 19);
-            this.levelMaxUpDown.TabIndex = 13;
-            this.levelMaxUpDown.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
             // 
             // levelRangeLabel
             // 
             this.levelRangeLabel.AutoSize = true;
-            this.levelRangeLabel.Location = new System.Drawing.Point(39, 5);
+            this.levelRangeLabel.Location = new System.Drawing.Point(81, 5);
             this.levelRangeLabel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.levelRangeLabel.Name = "levelRangeLabel";
             this.levelRangeLabel.Size = new System.Drawing.Size(17, 12);
@@ -277,10 +255,32 @@
             0,
             0});
             this.levelMinUpDown.Name = "levelMinUpDown";
-            this.levelMinUpDown.Size = new System.Drawing.Size(30, 19);
+            this.levelMinUpDown.Size = new System.Drawing.Size(69, 19);
             this.levelMinUpDown.TabIndex = 12;
             this.levelMinUpDown.Value = new decimal(new int[] {
             1,
+            0,
+            0,
+            0});
+            // 
+            // levelMaxUpDown
+            // 
+            this.levelMaxUpDown.Location = new System.Drawing.Point(104, 3);
+            this.levelMaxUpDown.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.levelMaxUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.levelMaxUpDown.Name = "levelMaxUpDown";
+            this.levelMaxUpDown.Size = new System.Drawing.Size(69, 19);
+            this.levelMaxUpDown.TabIndex = 13;
+            this.levelMaxUpDown.Value = new decimal(new int[] {
+            12,
             0,
             0,
             0});
@@ -296,11 +296,11 @@
             this.tableLayoutPanel2.Controls.Add(this.label1, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.monsterDefenceMaxUpDown, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.monsterDefenceAllowUndefinitionCheckBox, 3, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(211, 385);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(211, 428);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(308, 27);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(308, 24);
             this.tableLayoutPanel2.TabIndex = 16;
             // 
             // monsterDefenceMinUpDown
@@ -339,7 +339,7 @@
             0});
             this.monsterDefenceMaxUpDown.Location = new System.Drawing.Point(128, 3);
             this.monsterDefenceMaxUpDown.Maximum = new decimal(new int[] {
-            5000,
+            10000,
             0,
             0,
             0});
@@ -356,7 +356,7 @@
             // 
             this.monsterDefenceAllowUndefinitionCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterDefenceAllowUndefinitionCheckBox.AutoSize = true;
-            this.monsterDefenceAllowUndefinitionCheckBox.Location = new System.Drawing.Point(227, 5);
+            this.monsterDefenceAllowUndefinitionCheckBox.Location = new System.Drawing.Point(227, 4);
             this.monsterDefenceAllowUndefinitionCheckBox.Name = "monsterDefenceAllowUndefinitionCheckBox";
             this.monsterDefenceAllowUndefinitionCheckBox.Size = new System.Drawing.Size(73, 16);
             this.monsterDefenceAllowUndefinitionCheckBox.TabIndex = 15;
@@ -374,12 +374,12 @@
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackRangeLabel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackAllowUndefinitionCheckBox, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackMinUpDown, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(211, 350);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(211, 394);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(308, 28);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(308, 27);
             this.tableLayoutPanel1.TabIndex = 15;
             // 
             // monsterAttackMaxUpDown
@@ -391,7 +391,7 @@
             0});
             this.monsterAttackMaxUpDown.Location = new System.Drawing.Point(128, 3);
             this.monsterAttackMaxUpDown.Maximum = new decimal(new int[] {
-            5000,
+            10000,
             0,
             0,
             0});
@@ -418,7 +418,7 @@
             // 
             this.monsterAttackAllowUndefinitionCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterAttackAllowUndefinitionCheckBox.AutoSize = true;
-            this.monsterAttackAllowUndefinitionCheckBox.Location = new System.Drawing.Point(227, 6);
+            this.monsterAttackAllowUndefinitionCheckBox.Location = new System.Drawing.Point(227, 5);
             this.monsterAttackAllowUndefinitionCheckBox.Name = "monsterAttackAllowUndefinitionCheckBox";
             this.monsterAttackAllowUndefinitionCheckBox.Size = new System.Drawing.Size(73, 16);
             this.monsterAttackAllowUndefinitionCheckBox.TabIndex = 15;
@@ -446,16 +446,16 @@
             // 
             this.monsterTypeListBox.FormattingEnabled = true;
             this.monsterTypeListBox.ItemHeight = 12;
-            this.monsterTypeListBox.Location = new System.Drawing.Point(211, 269);
+            this.monsterTypeListBox.Location = new System.Drawing.Point(211, 266);
             this.monsterTypeListBox.Name = "monsterTypeListBox";
-            this.monsterTypeListBox.Size = new System.Drawing.Size(170, 64);
+            this.monsterTypeListBox.Size = new System.Drawing.Size(170, 112);
             this.monsterTypeListBox.TabIndex = 10;
             // 
             // monsterAttributeListBox
             // 
             this.monsterAttributeListBox.FormattingEnabled = true;
             this.monsterAttributeListBox.ItemHeight = 12;
-            this.monsterAttributeListBox.Location = new System.Drawing.Point(211, 222);
+            this.monsterAttributeListBox.Location = new System.Drawing.Point(211, 219);
             this.monsterAttributeListBox.Name = "monsterAttributeListBox";
             this.monsterAttributeListBox.Size = new System.Drawing.Size(170, 40);
             this.monsterAttributeListBox.TabIndex = 9;
@@ -464,7 +464,7 @@
             // 
             this.monsterTypeLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterTypeLabel.AutoSize = true;
-            this.monsterTypeLabel.Location = new System.Drawing.Point(4, 300);
+            this.monsterTypeLabel.Location = new System.Drawing.Point(4, 320);
             this.monsterTypeLabel.Name = "monsterTypeLabel";
             this.monsterTypeLabel.Size = new System.Drawing.Size(29, 12);
             this.monsterTypeLabel.TabIndex = 10;
@@ -562,7 +562,7 @@
             // 
             this.monsterAttributeLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterAttributeLabel.AutoSize = true;
-            this.monsterAttributeLabel.Location = new System.Drawing.Point(4, 236);
+            this.monsterAttributeLabel.Location = new System.Drawing.Point(4, 233);
             this.monsterAttributeLabel.Name = "monsterAttributeLabel";
             this.monsterAttributeLabel.Size = new System.Drawing.Size(29, 12);
             this.monsterAttributeLabel.TabIndex = 9;
@@ -572,7 +572,7 @@
             // 
             this.resultCountLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.resultCountLabel.AutoSize = true;
-            this.resultCountLabel.Location = new System.Drawing.Point(4, 443);
+            this.resultCountLabel.Location = new System.Drawing.Point(4, 463);
             this.resultCountLabel.Name = "resultCountLabel";
             this.resultCountLabel.Size = new System.Drawing.Size(117, 12);
             this.resultCountLabel.TabIndex = 18;
@@ -582,7 +582,7 @@
             // 
             this.attackCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.attackCheckBox.AutoSize = true;
-            this.attackCheckBox.Location = new System.Drawing.Point(4, 356);
+            this.attackCheckBox.Location = new System.Drawing.Point(4, 399);
             this.attackCheckBox.Name = "attackCheckBox";
             this.attackCheckBox.Size = new System.Drawing.Size(84, 16);
             this.attackCheckBox.TabIndex = 21;
@@ -597,7 +597,7 @@
             0,
             0,
             0});
-            this.resultCountUpDown.Location = new System.Drawing.Point(211, 440);
+            this.resultCountUpDown.Location = new System.Drawing.Point(211, 460);
             this.resultCountUpDown.Maximum = new decimal(new int[] {
             500,
             0,
@@ -638,6 +638,62 @@
             this.conditionClearButton.UseVisualStyleBackColor = true;
             this.conditionClearButton.Click += new System.EventHandler(this.conditionClearButton_Click);
             // 
+            // levelRankLinkGroupBox
+            // 
+            this.levelRankLinkGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.levelRankLinkGroupBox.Controls.Add(this.linkRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.rankRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.levelRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.nonRadioButton);
+            this.levelRankLinkGroupBox.Location = new System.Drawing.Point(4, 186);
+            this.levelRankLinkGroupBox.Name = "levelRankLinkGroupBox";
+            this.levelRankLinkGroupBox.Size = new System.Drawing.Size(200, 26);
+            this.levelRankLinkGroupBox.TabIndex = 27;
+            this.levelRankLinkGroupBox.TabStop = false;
+            // 
+            // linkRadioButton
+            // 
+            this.linkRadioButton.AutoSize = true;
+            this.linkRadioButton.Location = new System.Drawing.Point(136, 7);
+            this.linkRadioButton.Name = "linkRadioButton";
+            this.linkRadioButton.Size = new System.Drawing.Size(44, 16);
+            this.linkRadioButton.TabIndex = 3;
+            this.linkRadioButton.Text = "Link";
+            this.linkRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // rankRadioButton
+            // 
+            this.rankRadioButton.AutoSize = true;
+            this.rankRadioButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rankRadioButton.Location = new System.Drawing.Point(87, 7);
+            this.rankRadioButton.Name = "rankRadioButton";
+            this.rankRadioButton.Size = new System.Drawing.Size(49, 16);
+            this.rankRadioButton.TabIndex = 2;
+            this.rankRadioButton.Text = "Rank";
+            this.rankRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // levelRadioButton
+            // 
+            this.levelRadioButton.AutoSize = true;
+            this.levelRadioButton.Location = new System.Drawing.Point(46, 7);
+            this.levelRadioButton.Name = "levelRadioButton";
+            this.levelRadioButton.Size = new System.Drawing.Size(35, 16);
+            this.levelRadioButton.TabIndex = 1;
+            this.levelRadioButton.Text = "Lv";
+            this.levelRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // nonRadioButton
+            // 
+            this.nonRadioButton.AutoSize = true;
+            this.nonRadioButton.Checked = true;
+            this.nonRadioButton.Location = new System.Drawing.Point(7, 7);
+            this.nonRadioButton.Name = "nonRadioButton";
+            this.nonRadioButton.Size = new System.Drawing.Size(42, 16);
+            this.nonRadioButton.TabIndex = 0;
+            this.nonRadioButton.TabStop = true;
+            this.nonRadioButton.Text = "なし";
+            this.nonRadioButton.UseVisualStyleBackColor = true;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.searchResultPanel);
@@ -671,60 +727,6 @@
             this.cardDescription.Size = new System.Drawing.Size(607, 192);
             this.cardDescription.TabIndex = 16;
             // 
-            // levelRankLinkGroupBox
-            // 
-            this.levelRankLinkGroupBox.Controls.Add(this.linkRadioButton);
-            this.levelRankLinkGroupBox.Controls.Add(this.rankRadioButton);
-            this.levelRankLinkGroupBox.Controls.Add(this.levelRadioButton);
-            this.levelRankLinkGroupBox.Controls.Add(this.nonRadioButton);
-            this.levelRankLinkGroupBox.Location = new System.Drawing.Point(4, 186);
-            this.levelRankLinkGroupBox.Name = "levelRankLinkGroupBox";
-            this.levelRankLinkGroupBox.Size = new System.Drawing.Size(200, 29);
-            this.levelRankLinkGroupBox.TabIndex = 27;
-            this.levelRankLinkGroupBox.TabStop = false;
-            // 
-            // nonRadioButton
-            // 
-            this.nonRadioButton.AutoSize = true;
-            this.nonRadioButton.Checked = true;
-            this.nonRadioButton.Location = new System.Drawing.Point(7, 7);
-            this.nonRadioButton.Name = "nonRadioButton";
-            this.nonRadioButton.Size = new System.Drawing.Size(42, 16);
-            this.nonRadioButton.TabIndex = 0;
-            this.nonRadioButton.TabStop = true;
-            this.nonRadioButton.Text = "なし";
-            this.nonRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // levelRadioButton
-            // 
-            this.levelRadioButton.AutoSize = true;
-            this.levelRadioButton.Location = new System.Drawing.Point(46, 7);
-            this.levelRadioButton.Name = "levelRadioButton";
-            this.levelRadioButton.Size = new System.Drawing.Size(35, 16);
-            this.levelRadioButton.TabIndex = 1;
-            this.levelRadioButton.Text = "Lv";
-            this.levelRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // rankRadioButton
-            // 
-            this.rankRadioButton.AutoSize = true;
-            this.rankRadioButton.Location = new System.Drawing.Point(87, 7);
-            this.rankRadioButton.Name = "rankRadioButton";
-            this.rankRadioButton.Size = new System.Drawing.Size(49, 16);
-            this.rankRadioButton.TabIndex = 2;
-            this.rankRadioButton.Text = "Rank";
-            this.rankRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // linkRadioButton
-            // 
-            this.linkRadioButton.AutoSize = true;
-            this.linkRadioButton.Location = new System.Drawing.Point(136, 7);
-            this.linkRadioButton.Name = "linkRadioButton";
-            this.linkRadioButton.Size = new System.Drawing.Size(44, 16);
-            this.linkRadioButton.TabIndex = 3;
-            this.linkRadioButton.Text = "Link";
-            this.linkRadioButton.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -746,8 +748,8 @@
             this.tableLayoutPanel.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.levelMaxUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelMinUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.levelMaxUpDown)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monsterDefenceMinUpDown)).EndInit();
@@ -758,9 +760,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.monsterAttackMinUpDown)).EndInit();
             this.kindFlowLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.resultCountUpDown)).EndInit();
-            this.tabPage2.ResumeLayout(false);
             this.levelRankLinkGroupBox.ResumeLayout(false);
             this.levelRankLinkGroupBox.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

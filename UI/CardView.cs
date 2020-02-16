@@ -18,7 +18,14 @@ namespace YugiohDeck.UI
             set
             {
                 this.card = value;
-                this.pictureBox.Image = new Bitmap(CardImageCollection.GetImageOf(value.IdentityShortName));
+                try
+                {
+                    this.pictureBox.Image = new Bitmap(CardImageCollection.GetImageOf(value.IdentityShortName));
+                }
+                catch
+                {
+                    this.pictureBox.Image = this.pictureBox.ErrorImage;
+                }
             }
         }
         public CardView()

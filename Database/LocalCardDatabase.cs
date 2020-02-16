@@ -10,6 +10,11 @@ namespace YugiohDeck.Database
     {
         private static readonly IDictionary<string, Card> cards = new Dictionary<string, Card>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <exception cref="Exception"></exception>
         public static void LoadAllExistingCards(Action<string> notification)
         {
             cards.Clear();

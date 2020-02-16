@@ -158,7 +158,7 @@ namespace YugiohDeck.Database
             return cards
                 .Where(card => this.CardKindCondition.Map(cond => cond.Matches(card.Kinds)).UnwrapOr(true))
                 .Where(card => this.NameCondition.Map(cond => cond.Matches(card.IdentityShortName)).UnwrapOr(true))
-                .Where(card => this.DescriptionCondition.Map(cond => cond.Matches(card.ConstructFormattedInfoWithoutDescription())).UnwrapOr(true))
+                .Where(card => this.DescriptionCondition.Map(cond => cond.Matches(card.Description)).UnwrapOr(true))
                 .Where(card => this.PronunciationCondition.Map(cond => cond.Matches(card.Pronunciation)).UnwrapOr(true))
                 .Where(card => this.AttributeCondition.Map(attr => card.Attribute.Map(a => attr.Equals(a)).UnwrapOr(false)).UnwrapOr(true))
                 .Where(card => this.RaceCodition.Map(race => card.Race.Map(r => race.Equals(r)).UnwrapOr(false)).UnwrapOr(true))
