@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using YugiohDeck.Core;
+using YugiohCardDatabase;
 
 namespace YugiohDeck.UI
 {
@@ -38,7 +38,7 @@ namespace YugiohDeck.UI
             var cardView = new CardView() { Card = card };
             cardView.DescriptionRequested += (_, e) => this.DescriptionRequested?.Invoke(this, e);
             this.panel.Controls.Add(cardView);
-            this.messageLabel.Text = $"{card.Name}を引いた";
+            this.messageLabel.Text = $"{card.IdentityShortName}を引いた";
         }
         private void drawButton_Click(object sender, EventArgs e)
         {

@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Runtime.Serialization;
 using YugiohDeck.Database;
+using YugiohCardDatabase;
+
+#nullable enable
 
 namespace YugiohDeck.Core
 {
@@ -14,7 +17,7 @@ namespace YugiohDeck.Core
         [DataMember]
         private Dictionary<string, int> CardNames
         {
-            get => this.CardCounts.ToDictionary(c => c.Key.Name, c => c.Value);
+            get => this.CardCounts.ToDictionary(c => c.Key.IdentityShortName, c => c.Value);
             set
             {
                 this.CardCounts = new SortedDictionary<Card, int>();

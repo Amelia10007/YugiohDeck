@@ -6,14 +6,20 @@ using YugiohDeck.Core;
 using YugiohDeck.Database;
 using System.Threading.Tasks;
 using System.Threading;
+using YugiohCardDatabase;
 
 namespace YugiohDeck.UI
 {
     public partial class MainForm : Form
     {
-        private readonly SynchronizationContext uiContext;
         private static readonly string listBoxNoSelectedItem = "None";
+
+        private readonly SynchronizationContext uiContext;
+        private LimitRegulationDatabase limitRegulationDatabase;
+
+
         private DeckView ActiveDeckView => this.deckTab.SelectedTab?.Controls[0] as DeckView;
+
         public MainForm()
         {
             InitializeComponent();
@@ -76,8 +82,8 @@ namespace YugiohDeck.UI
 
         private void AddDeckView(string deckName, bool createNew)
         {
-            var deck = createNew ? new Deck(deckName) : LocalDeckDatabase.SearchDeck(deckName);
-            var deckView = new DeckView() { Deck = deck };
+            var deck = createNew ? new Deck(deckName) : Storage.ReadDeck(deckName);
+            var deckView = new DeckView(this.limitRegulationDatabase) { Deck = deck };
             var tabPage = new TabPage(deckName);
             deckView.DescriptionRequested += (_, card) => this.ShowCardDescription(card);
             deckView.DeckRenamed += (_, name) => tabPage.Text = name;
@@ -110,10 +116,12 @@ namespace YugiohDeck.UI
                 try
                 {
                     LocalCardDatabase.LoadAllExistingCards(s => this.SetMessageLabel(s));
+                    this.limitRegulationDatabase = Storage.ReadLimitRegulationDatabase();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "データベースの読み込みに失敗");
+                    throw;
                 }
             });
             this.SetMessageLabel("Ready");
@@ -125,7 +133,7 @@ namespace YugiohDeck.UI
             if (this.nameTextBox.Text.Any())
             {
                 var keywords = GetKeywords(this.nameTextBox.Text);
-                return Option<TextSearchCondition>.Some(new TextSearchCondition()
+                return Option.Some(new TextSearchCondition()
                 {
                     Combination = SearchConditionCombination.And,
                     Words = keywords
@@ -133,7 +141,7 @@ namespace YugiohDeck.UI
             }
             else
             {
-                return Option<TextSearchCondition>.None;
+                return Option.None<TextSearchCondition>();
             }
         }
 
@@ -142,7 +150,7 @@ namespace YugiohDeck.UI
             if (this.pronunciationTextBox.Text.Any())
             {
                 var keywords = GetKeywords(this.pronunciationTextBox.Text);
-                return Option<PronunciationSearchCondition>.Some(new PronunciationSearchCondition()
+                return Option.Some(new PronunciationSearchCondition()
                 {
                     Combination = SearchConditionCombination.And,
                     Words = keywords,
@@ -150,7 +158,7 @@ namespace YugiohDeck.UI
             }
             else
             {
-                return Option<PronunciationSearchCondition>.None;
+                return Option.None<PronunciationSearchCondition>();
             }
         }
 
@@ -160,7 +168,7 @@ namespace YugiohDeck.UI
             {
 
                 var keywords = GetKeywords(this.textTextBox.Text);
-                return Option<TextSearchCondition>.Some(new TextSearchCondition()
+                return Option.Some(new TextSearchCondition()
                 {
                     Combination = SearchConditionCombination.And,
                     Words = keywords
@@ -168,7 +176,7 @@ namespace YugiohDeck.UI
             }
             else
             {
-                return Option<TextSearchCondition>.None;
+                return Option.None<TextSearchCondition>();
             }
         }
 
@@ -194,7 +202,7 @@ namespace YugiohDeck.UI
             }
             if (kinds.Any())
             {
-                return Option<CardKindSearchCondition>.Some(new CardKindSearchCondition()
+                return Option.Some(new CardKindSearchCondition()
                 {
                     CardKinds = kinds,
                     Combination = SearchConditionCombination.And,
@@ -202,98 +210,141 @@ namespace YugiohDeck.UI
             }
             else
             {
-                return Option<CardKindSearchCondition>.None;
+                return Option.None<CardKindSearchCondition>();
             }
         }
 
         private Option<MonsterLevelSearchCondition> GetMonsterLevelCondition()
         {
-            if (!this.levelCheckBox.Checked)
+            if (!this.levelRadioButton.Checked)
             {
-                return Option<MonsterLevelSearchCondition>.None;
+                return Option.None<MonsterLevelSearchCondition>();
             }
             try
             {
-                var min = (int)this.levelMinUpDown.Value;
-                var max = (int)this.levelMaxUpDown.Value;
-                return Option<MonsterLevelSearchCondition>.Some(new MonsterLevelSearchCondition()
+                var min = this.levelMinUpDown.Value;
+                var max = this.levelMaxUpDown.Value;
+                return Option.Some(new MonsterLevelSearchCondition()
                 {
-                    Range = new Range<int>(min, max),
+                    Range = new Range<byte>((byte)min, (byte)max),
                 });
             }
             catch (ArgumentOutOfRangeException)
             {
-                return Option<MonsterLevelSearchCondition>.None;
+                return Option.None<MonsterLevelSearchCondition>();
             }
         }
 
-        private Option<string> GetMonsterAttributeCondition()
+        private Option<MonsterRankSearchCondition> GetMonsterRankSearchCondition()
+        {
+            if (!this.rankRadioButton.Checked)
+            {
+                return Option.None<MonsterRankSearchCondition>();
+            }
+            try
+            {
+                var min = this.levelMinUpDown.Value;
+                var max = this.levelMaxUpDown.Value;
+                return Option.Some(new MonsterRankSearchCondition()
+                {
+                    Range = new Range<byte>((byte)min, (byte)max),
+                });
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return Option.None<MonsterRankSearchCondition>();
+            }
+        }
+
+        private Option<MonsterLinkSearchCondition> GetMonsterLinkSearchCondition()
+        {
+
+            if (!this.linkRadioButton.Checked)
+            {
+                return Option.None<MonsterLinkSearchCondition>();
+            }
+            try
+            {
+                var min = this.levelMinUpDown.Value;
+                var max = this.levelMaxUpDown.Value;
+                return Option.Some(new MonsterLinkSearchCondition()
+                {
+                    Range = new Range<int>((int)min, (int)max),
+                });
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return Option.None<MonsterLinkSearchCondition>();
+            }
+        }
+
+        private Option<MonsterAttribute> GetMonsterAttributeCondition()
         {
             if (this.monsterAttributeListBox.SelectedIndex == -1 || this.monsterAttributeListBox.SelectedItem == (object)listBoxNoSelectedItem)
             {
-                return Option<string>.None;
+                return Option.None<MonsterAttribute>();
             }
             else
             {
-                return Option<string>.Some(this.monsterAttributeListBox.SelectedItem.ToString());
+                return Option.Some(new MonsterAttribute(this.monsterAttributeListBox.SelectedItem.ToString()));
             }
         }
 
-        private Option<string> GetMonsterTypeCondition()
+        private Option<MonsterRace> GetMonsterRaceCondition()
         {
             if (this.monsterTypeListBox.SelectedIndex == -1 || this.monsterTypeListBox.SelectedItem == (object)listBoxNoSelectedItem)
             {
-                return Option<string>.None;
+                return Option.None<MonsterRace>();
             }
             else
             {
-                return Option<string>.Some(this.monsterTypeListBox.SelectedItem.ToString());
+                return Option.Some(new MonsterRace(this.monsterTypeListBox.SelectedItem.ToString()));
             }
         }
 
-        private Option<MonsterBattleStatusRange> GetMonsterAttackCondition()
+        private Option<MonsterAttackRange> GetMonsterAttackCondition()
         {
             if (!this.attackCheckBox.Checked)
             {
-                return Option<MonsterBattleStatusRange>.None;
+                return Option.None<MonsterAttackRange>();
             }
             try
             {
                 var min = (int)this.monsterAttackMinUpDown.Value;
                 var max = (int)this.monsterAttackMaxUpDown.Value;
                 var allowUndefinition = this.monsterAttackAllowUndefinitionCheckBox.Checked;
-                return Option<MonsterBattleStatusRange>.Some(new MonsterBattleStatusRange()
+                return Option.Some(new MonsterAttackRange()
                 {
-                    Range = Option<Range<int>>.Some(new Range<int>(min, max)),
+                    Range = new Range<int>(min, max),
                     AllowUndefinedBattleStatus = allowUndefinition,
                 });
             }
             catch (ArgumentOutOfRangeException)
             {
-                return Option<MonsterBattleStatusRange>.None;
+                return Option.None<MonsterAttackRange>();
             }
         }
 
-        private Option<MonsterBattleStatusRange> GetMonsterDefenceCondition()
+        private Option<MonsterDefenceRange> GetMonsterDefenceCondition()
         {
             if (!this.defenceCheckBox.Checked)
             {
-                return Option<MonsterBattleStatusRange>.None;
+                return Option.None<MonsterDefenceRange>();
             }
             try
             {
                 var min = (int)this.monsterDefenceMinUpDown.Value;
                 var max = (int)this.monsterDefenceMaxUpDown.Value;
                 var allowUndefinition = this.monsterDefenceAllowUndefinitionCheckBox.Checked;
-                return Option<MonsterBattleStatusRange>.Some(new MonsterBattleStatusRange()
+                return Option.Some(new MonsterDefenceRange()
                 {
-                    Range = Option<Range<int>>.Some(new Range<int>(min, max)),
+                    Range = new Range<int>(min, max),
                     AllowUndefinedBattleStatus = allowUndefinition,
                 });
             }
             catch (ArgumentOutOfRangeException)
             {
-                return Option<MonsterBattleStatusRange>.None;
+                return Option.None<MonsterDefenceRange>();
             }
         }
 
@@ -326,7 +377,7 @@ namespace YugiohDeck.UI
             inputForm.ShowDialog(this.ParentForm);
             if (inputForm.InputResult != DialogResult.OK) return;
             var deckName = inputForm.InputText;
-            if (LocalDeckDatabase.EnumerateDeckNames().Contains(deckName))
+            if (Storage.EnumerateDecknames().Contains(deckName))
             {
                 MessageBox.Show($"デッキ \'{deckName}\'は既に存在します．");
                 return;
@@ -344,14 +395,13 @@ namespace YugiohDeck.UI
 
         private void openButton_Click(object sender, EventArgs e)
         {
-            var deckNames = LocalDeckDatabase.EnumerateDeckNames();
             var openedDeckNames = new List<string>();
             foreach (var page in this.deckTab.TabPages)
             {
                 var deckName = ((page as TabPage)?.Controls[0] as DeckView)?.Deck.Name;
                 if (deckName != null) openedDeckNames.Add(deckName);
             }
-            var selectForm = new DeckSelectForm() { DeckNames = deckNames.ToArray() };
+            var selectForm = new DeckSelectForm() { DeckNames = Storage.EnumerateDecknames().ToArray() };
             var result = selectForm.ShowDialog();
             if (result != DialogResult.OK) return;
             var selectedDeckNames = selectForm.SelectedDeckNames;
@@ -366,6 +416,7 @@ namespace YugiohDeck.UI
                 catch (Exception ex)
                 {
                     this.messageLabel.Text = $"デッキ:{deckName}を開けませんでした:{ex.Message}";
+                    throw;
                 }
             }
         }
@@ -380,11 +431,13 @@ namespace YugiohDeck.UI
                 PronunciationCondition = this.GetPronunciationCondition(),
                 DescriptionCondition = this.GetDescriptionCondition(),
                 CardKindCondition = this.GetCardKindCondition(),
-                MonsterLevel = this.GetMonsterLevelCondition(),
-                MonsterAttribute = this.GetMonsterAttributeCondition(),
-                MonsterType = this.GetMonsterTypeCondition(),
-                MonsterAttack = this.GetMonsterAttackCondition(),
-                MonsterDefence = this.GetMonsterDefenceCondition(),
+                LevelCondition = this.GetMonsterLevelCondition(),
+                RankCondition = this.GetMonsterRankSearchCondition(),
+                LinkCondition = this.GetMonsterLinkSearchCondition(),
+                AttributeCondition = this.GetMonsterAttributeCondition(),
+                RaceCodition = this.GetMonsterRaceCondition(),
+                AttackCondition = this.GetMonsterAttackCondition(),
+                DefenceCondition = this.GetMonsterDefenceCondition(),
                 MaxResultCount = this.GetResultCount(),
             };
             this.ClearSearchResult();
@@ -414,7 +467,7 @@ namespace YugiohDeck.UI
                 asListBox.SelectedIndex = -1;
             }
             //level
-            this.levelCheckBox.Checked = false;
+            this.nonRadioButton.Checked = true;
             this.levelMinUpDown.Value = this.levelMinUpDown.Minimum;
             this.levelMaxUpDown.Value = this.levelMaxUpDown.Maximum;
             //

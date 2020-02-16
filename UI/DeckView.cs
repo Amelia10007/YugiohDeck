@@ -3,11 +3,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using YugiohDeck.Core;
 using YugiohDeck.Database;
+using YugiohCardDatabase;
 
 namespace YugiohDeck.UI
 {
     partial class DeckView : UserControl
     {
+        private readonly LimitRegulationDatabase limitRegulationDatabase;
+
         public event EventHandler<string> MessageSent;
         private Deck deck;
         public Deck Deck
@@ -25,31 +28,32 @@ namespace YugiohDeck.UI
         public event EventHandler<string> DeckRenamed;
         public event EventHandler DeckRemoved;
         public event EventHandler DeckClosed;
-        public DeckView()
+        public DeckView(LimitRegulationDatabase limitRegulationDatabase)
         {
             InitializeComponent();
+            this.limitRegulationDatabase = limitRegulationDatabase;
         }
         public void AddCardToMainDeck(Card card)
         {
             this.Deck.MainDeck.Add(card);
             this.AddCardToDeckView(this.mainDeckPanel, this.Deck.MainDeck, card);
-            this.MessageSent?.Invoke(this, $"{card.Name}をメインデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をメインデッキに追加しました．");
         }
         public void AddCardToExtraDeck(Card card)
         {
             this.Deck.ExtraDeck.Add(card);
             this.AddCardToDeckView(this.extraDeckPanel, this.Deck.ExtraDeck, card);
-            this.MessageSent?.Invoke(this, $"{card.Name}をエクストラデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をエクストラデッキに追加しました．");
         }
         public void AddCardToSideDeck(Card card)
         {
             this.Deck.SideDeck.Add(card);
             this.AddCardToDeckView(this.sideDeckPanel, this.Deck.SideDeck, card);
-            this.MessageSent?.Invoke(this, $"{card.Name}をサイドデッキに追加しました．");
+            this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をサイドデッキに追加しました．");
         }
         private void UpdateDeckCountLabel()
         {
-            var isLegal = this.Deck.IsLegalDeck();
+            var isLegal = this.Deck.IsLegalDeck(this.limitRegulationDatabase);
             var labelColor = isLegal ? Color.Black : Color.Red;
             this.deckCountLabel.ForeColor = labelColor;
             this.deckCountLabel.Text = $"Main: {this.Deck.MainDeck.Count}, Extra: {this.Deck.ExtraDeck.Count}, Side: {this.Deck.SideDeck.Count}";
@@ -71,12 +75,12 @@ namespace YugiohDeck.UI
             {
                 deck.Add(card);
                 this.AddCardToDeckView(panel, deck, card);
-                this.MessageSent?.Invoke(this, $"{card.Name}をデッキに追加しました．");
+                this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をデッキに追加しました．");
             };
             view.RemoveButtonClicked += (_, e) =>
             {
                 this.RemoveCardFromDeckView(panel, deck, card);
-                this.MessageSent?.Invoke(this, $"{card.Name}をデッキから削除しました．");
+                this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をデッキから削除しました．");
             };
             panel.Controls.Add(view);
             panel.Controls.SetChildIndex(view, insertIndex);
@@ -89,14 +93,14 @@ namespace YugiohDeck.UI
             deck.Remove(card);
             panel.Controls.RemoveAt(removeIndex);
             this.UpdateDeckCountLabel();
-            this.MessageSent?.Invoke(this, $"{card.Name}をデッキから削除しました．");
+            this.MessageSent?.Invoke(this, $"{card.IdentityShortName}をデッキから削除しました．");
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             try
             {
-                LocalDeckDatabase.SaveDeck(this.Deck);
+                Storage.WriteDeck(this.Deck);
                 this.MessageSent?.Invoke(this, $"デッキ:{this.Deck.Name}を保存しました．");
             }
             catch (Exception ex)
@@ -126,16 +130,16 @@ namespace YugiohDeck.UI
             };
             inputForm.ShowDialog(this.ParentForm);
             if (inputForm.InputResult != DialogResult.OK) return;
-            var deckName = inputForm.InputText;
+            var newDeckName = inputForm.InputText;
             try
             {
-                LocalDeckDatabase.DeleteDeck(this.Deck.Name);
-                this.Deck.Name = deckName;
-                LocalDeckDatabase.SaveDeck(this.Deck);
-                this.DeckRenamed?.Invoke(this, deckName);
+                Storage.DeleteDeck(this.Deck.Name);
+                this.Deck.Name = newDeckName;
+                Storage.WriteDeck(this.Deck);
+                this.DeckRenamed?.Invoke(this, newDeckName);
                 this.MessageSent?.Invoke(this, "デッキ名を変更しました．");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this.ParentForm, "デッキの名前変更に失敗しました．\n" + ex.Message);
             }
@@ -148,7 +152,7 @@ namespace YugiohDeck.UI
             {
                 try
                 {
-                    LocalDeckDatabase.DeleteDeck(this.Deck.Name);
+                    Storage.DeleteDeck(this.Deck.Name);
                     this.DeckRemoved?.Invoke(this, EventArgs.Empty);
                     this.MessageSent?.Invoke(this, $"デッキ:{this.Deck.Name}を削除しました．");
                 }

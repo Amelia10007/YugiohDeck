@@ -1,8 +1,7 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using YugiohDeck.Core;
 using YugiohDeck.Database;
+using YugiohCardDatabase;
 
 namespace YugiohDeck.UI
 {
@@ -21,14 +20,14 @@ namespace YugiohDeck.UI
                     return;
                 }
                 this.card = value;
-                this.headerLabel.Text = value.GetDescriptionHeader();
+                this.headerLabel.Text = value.ConstructFormattedInfoWithoutDescription();
                 this.descriptionLabel.Text = value.Description;
                 var back = CardColor.GetColor(value.Kinds);
                 var front = Color.FromArgb(back.R ^ 0xff, back.G ^ 0xff, back.B ^ 0xff);
                 this.headerLabel.ForeColor = front;
                 this.descriptionLabel.ForeColor = front;
                 this.BackColor = back;
-                this.pictureBox.Image = CardImageCollection.GetImageOf(value.Name);
+                this.pictureBox.Image = CardImageCollection.GetImageOf(value.IdentityShortName);
             }
         }
         public CardDescription()

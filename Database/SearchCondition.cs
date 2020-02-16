@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YugiohDeck.Core;
+using YugiohCardDatabase;
+
+#nullable enable
 
 namespace YugiohDeck.Database
 {
@@ -70,14 +71,70 @@ namespace YugiohDeck.Database
 
     class MonsterLevelSearchCondition
     {
-        public Range<int> Range;
-        public bool Matches(string monsterLevel)
+        public Range<byte> Range;
+        public bool Matches(Option<MonsterLevel> level)
         {
-            if (!int.TryParse(monsterLevel, out var level))
-            {
-                return false;
-            }
-            return this.Range.Contains(level);
+            return level
+                .Map(l => this.Range.Contains(l.Level))
+                .UnwrapOr(false);
+        }
+    }
+
+    class MonsterRankSearchCondition
+    {
+        public Range<byte> Range;
+        public bool Matches(Option<MonsterRank> rank)
+        {
+            return rank
+                .Map(r => this.Range.Contains(r.Rank))
+                .UnwrapOr(false);
+        }
+    }
+
+    class MonsterLinkSearchCondition
+    {
+        public Range<int> Range;
+        public bool Matches(Option<MonsterLink> link)
+        {
+            return link
+                .Map(l => this.Range.Contains(l.LinkCount))
+                .UnwrapOr(false);
+        }
+    }
+
+    class MonsterAttackRange
+    {
+        public Range<int> Range;
+        /// <summary>
+        /// ステータス'?'とマッチするか．
+        /// </summary>
+        public bool AllowUndefinedBattleStatus;
+
+        public bool Matches(Option<MonsterAttack> battleStatus)
+        {
+            return battleStatus
+                .Map(battleStatus => battleStatus.Status
+                    .Map(status => this.Range.Contains(status))
+                    .UnwrapOr(this.AllowUndefinedBattleStatus))
+                .UnwrapOr(false);
+        }
+    }
+
+    class MonsterDefenceRange
+    {
+        public Range<int> Range;
+        /// <summary>
+        /// ステータス'?'とマッチするか．
+        /// </summary>
+        public bool AllowUndefinedBattleStatus;
+
+        public bool Matches(Option<MonsterDefence> battleStatus)
+        {
+            return battleStatus
+                .Map(battleStatus => battleStatus.Status
+                    .Map(status => this.Range.Contains(status))
+                    .UnwrapOr(this.AllowUndefinedBattleStatus))
+                .UnwrapOr(false);
         }
     }
 
@@ -87,42 +144,30 @@ namespace YugiohDeck.Database
         public Option<TextSearchCondition> NameCondition;
         public Option<TextSearchCondition> DescriptionCondition;
         public Option<PronunciationSearchCondition> PronunciationCondition;
-        public Option<MonsterLevelSearchCondition> MonsterLevel;
-        public Option<string> MonsterAttribute;
-        public Option<string> MonsterType;
-        public Option<MonsterBattleStatusRange> MonsterAttack;
-        public Option<MonsterBattleStatusRange> MonsterDefence;
+        public Option<MonsterAttribute> AttributeCondition;
+        public Option<MonsterRace> RaceCodition;
+        public Option<MonsterLevelSearchCondition> LevelCondition;
+        public Option<MonsterRankSearchCondition> RankCondition;
+        public Option<MonsterLinkSearchCondition> LinkCondition;
+        public Option<MonsterAttackRange> AttackCondition;
+        public Option<MonsterDefenceRange> DefenceCondition;
         public int MaxResultCount;
 
         public IEnumerable<Card> Matches(IEnumerable<Card> cards)
         {
             return cards
-                .WhereOrPass(this.CardKindCondition, (card, condition) => condition.Matches(card.Kinds))
-                .WhereOrPass(this.NameCondition, (card, condition) => condition.Matches(card.Name))
-                .WhereOrPass(this.DescriptionCondition, (card, condition) => condition.Matches(card.Description))
-                .WhereOrPass(this.PronunciationCondition, (card, condition) => condition.Matches(card.Pronunciation))
-                .WhereOrPass(this.MonsterLevel, (card, condition) => condition.Matches(card.MonsterLevel))
-                .WhereOrPass(this.MonsterAttribute, (card, condition) => card.MonsterAttribute.Contains(condition))
-                .WhereOrPass(this.MonsterType, (card, condition) => card.MonsterType.Contains(condition))
-                .WhereOrPass(this.MonsterAttack, (card, condition) => condition.Matches(card.MonsterAttack))
-                .WhereOrPass(this.MonsterDefence, (card, condition) => condition.Matches(card.MonsterDefense))
+                .Where(card => this.CardKindCondition.Map(cond => cond.Matches(card.Kinds)).UnwrapOr(true))
+                .Where(card => this.NameCondition.Map(cond => cond.Matches(card.IdentityShortName)).UnwrapOr(true))
+                .Where(card => this.DescriptionCondition.Map(cond => cond.Matches(card.ConstructFormattedInfoWithoutDescription())).UnwrapOr(true))
+                .Where(card => this.PronunciationCondition.Map(cond => cond.Matches(card.Pronunciation)).UnwrapOr(true))
+                .Where(card => this.AttributeCondition.Map(attr => card.Attribute.Map(a => attr.Equals(a)).UnwrapOr(false)).UnwrapOr(true))
+                .Where(card => this.RaceCodition.Map(race => card.Race.Map(r => race.Equals(r)).UnwrapOr(false)).UnwrapOr(true))
+                .Where(card => this.LevelCondition.Map(cond => cond.Matches(card.Level)).UnwrapOr(true))
+                .Where(card => this.RankCondition.Map(cond => cond.Matches(card.Rank)).UnwrapOr(true))
+                .Where(card => this.LinkCondition.Map(cond => cond.Matches(card.Link)).UnwrapOr(true))
+                .Where(card => this.AttackCondition.Map(cond => cond.Matches(card.Attack)).UnwrapOr(true))
+                .Where(card => this.DefenceCondition.Map(cond => cond.Matches(card.Defence)).UnwrapOr(true))
                 .Take(MaxResultCount);
-        }
-    }
-
-    static class ExtensionForCardSearch
-    {
-        public static IEnumerable<T> WhereOrPass<T, U>(this IEnumerable<T> sequence, Option<U> option, Func<T, U, bool> predicateForSome)
-        {
-            if (option.IsValid)
-            {
-                var value = option.Unwrap();
-                return sequence.Where(item => predicateForSome(item, value));
-            }
-            else
-            {
-                return sequence;
-            }
         }
     }
 }

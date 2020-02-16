@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using YugiohCardDatabase;
+
+#nullable enable
 
 namespace YugiohDeck.Core
 {
@@ -22,25 +25,18 @@ namespace YugiohDeck.Core
         }
         public Deck(string deckName)
         {
-            this.Name = deckName;
+            this.name = deckName;
             this.MainDeck = new DeckUnit();
             this.ExtraDeck = new DeckUnit();
             this.SideDeck = new DeckUnit();
         }
-        private Deck(DeckUnit main, DeckUnit extra, DeckUnit side, string deckName)
-        {
-            this.Name = deckName;
-            this.MainDeck = main;
-            this.ExtraDeck = extra;
-            this.SideDeck = side;
-        }
-        public bool IsLegalDeck()
+        public bool IsLegalDeck(LimitRegulationDatabase limitRegulationDatabase)
         {
             return this.MainDeck.Cards
                 .Concat(this.ExtraDeck.Cards)
                 .Concat(this.SideDeck.Cards)
                 .GroupBy(c => c)
-                .All(g => g.Key.Limitation.Allow(g.Count()));
+                .All(g => g.Count() <= limitRegulationDatabase.GetLimitRegulationOf(g.Key.IdentityShortName).MaxAdoptableCount);
         }
         public void Clear()
         {

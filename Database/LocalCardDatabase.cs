@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using YugiohDeck.Core;
-using YugiohDeck.Serialization;
-using System.IO;
+using YugiohCardDatabase;
+
+#nullable enable
 
 namespace YugiohDeck.Database
 {
     static class LocalCardDatabase
     {
-        private static readonly string fileExtension = ".json";
         private static readonly IDictionary<string, Card> cards = new Dictionary<string, Card>();
+
         public static void LoadAllExistingCards(Action<string> notification)
         {
             cards.Clear();
             //
-            var files = Storage.EnumerateExistingFiles(false, new[] { "card", "text" });
-            var existingCards =
-              from file in files
-              let extension = new string(Path.GetExtension(file.Last()).ToArray()).ToLower()
-              where extension == fileExtension
-              let content = Storage.ReadString(file)
-              let card = Json.Deserialize<Card>(content)
-              select card;
-            //
             var i = 0;
-            foreach (var card in existingCards)
+            foreach(var card in Storage.EnumerateCards())
             {
-                cards.Add(card.Name, card);
-                notification?.Invoke($"[{i++}]: Load {card.Name}");
+                cards.Add(card.IdentityShortName, card);
+                notification?.Invoke($"Loaded card {i++}");
             }
         }
+
         public static IEnumerable<Card> SearchCardsByCondition(SearchCondition searchCondition)
         {
             return searchCondition.Matches(cards.Values);

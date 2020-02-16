@@ -1,5 +1,7 @@
 ﻿using System;
 
+#nullable enable
+
 namespace YugiohDeck.Core
 {
     class Range<T> where T : IComparable<T>

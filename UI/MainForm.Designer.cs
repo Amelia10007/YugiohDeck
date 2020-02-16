@@ -68,12 +68,16 @@
             this.resultCountLabel = new System.Windows.Forms.Label();
             this.attackCheckBox = new System.Windows.Forms.CheckBox();
             this.resultCountUpDown = new System.Windows.Forms.NumericUpDown();
-            this.levelCheckBox = new System.Windows.Forms.CheckBox();
             this.searchButton = new System.Windows.Forms.Button();
             this.conditionClearButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.searchResultPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.cardDescription = new YugiohDeck.UI.CardDescription();
+            this.levelRankLinkGroupBox = new System.Windows.Forms.GroupBox();
+            this.nonRadioButton = new System.Windows.Forms.RadioButton();
+            this.levelRadioButton = new System.Windows.Forms.RadioButton();
+            this.rankRadioButton = new System.Windows.Forms.RadioButton();
+            this.linkRadioButton = new System.Windows.Forms.RadioButton();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -89,6 +93,7 @@
             this.kindFlowLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resultCountUpDown)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.levelRankLinkGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // openButton
@@ -175,9 +180,9 @@
             this.tableLayoutPanel.Controls.Add(this.resultCountLabel, 0, 10);
             this.tableLayoutPanel.Controls.Add(this.attackCheckBox, 0, 8);
             this.tableLayoutPanel.Controls.Add(this.resultCountUpDown, 1, 10);
-            this.tableLayoutPanel.Controls.Add(this.levelCheckBox, 0, 5);
             this.tableLayoutPanel.Controls.Add(this.searchButton, 0, 0);
             this.tableLayoutPanel.Controls.Add(this.conditionClearButton, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.levelRankLinkGroupBox, 0, 5);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -193,6 +198,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(700, 484);
             this.tableLayoutPanel.TabIndex = 7;
             this.tableLayoutPanel.TabStop = true;
@@ -201,7 +207,7 @@
             // 
             this.defenceCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.defenceCheckBox.AutoSize = true;
-            this.defenceCheckBox.Location = new System.Drawing.Point(4, 421);
+            this.defenceCheckBox.Location = new System.Drawing.Point(4, 390);
             this.defenceCheckBox.Name = "defenceCheckBox";
             this.defenceCheckBox.Size = new System.Drawing.Size(84, 16);
             this.defenceCheckBox.TabIndex = 22;
@@ -214,20 +220,20 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tableLayoutPanel3.Controls.Add(this.levelMaxUpDown, 2, 0);
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37F));
             this.tableLayoutPanel3.Controls.Add(this.levelRangeLabel, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.levelMinUpDown, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(149, 218);
+            this.tableLayoutPanel3.Controls.Add(this.levelMaxUpDown, 2, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(211, 187);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(180, 26);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(96, 26);
             this.tableLayoutPanel3.TabIndex = 8;
             // 
             // levelMaxUpDown
             // 
-            this.levelMaxUpDown.Location = new System.Drawing.Point(102, 3);
+            this.levelMaxUpDown.Location = new System.Drawing.Point(62, 3);
             this.levelMaxUpDown.Maximum = new decimal(new int[] {
             12,
             0,
@@ -239,7 +245,7 @@
             0,
             0});
             this.levelMaxUpDown.Name = "levelMaxUpDown";
-            this.levelMaxUpDown.Size = new System.Drawing.Size(70, 19);
+            this.levelMaxUpDown.Size = new System.Drawing.Size(31, 19);
             this.levelMaxUpDown.TabIndex = 13;
             this.levelMaxUpDown.Value = new decimal(new int[] {
             12,
@@ -250,7 +256,7 @@
             // levelRangeLabel
             // 
             this.levelRangeLabel.AutoSize = true;
-            this.levelRangeLabel.Location = new System.Drawing.Point(79, 5);
+            this.levelRangeLabel.Location = new System.Drawing.Point(39, 5);
             this.levelRangeLabel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.levelRangeLabel.Name = "levelRangeLabel";
             this.levelRangeLabel.Size = new System.Drawing.Size(17, 12);
@@ -271,7 +277,7 @@
             0,
             0});
             this.levelMinUpDown.Name = "levelMinUpDown";
-            this.levelMinUpDown.Size = new System.Drawing.Size(70, 19);
+            this.levelMinUpDown.Size = new System.Drawing.Size(30, 19);
             this.levelMinUpDown.TabIndex = 12;
             this.levelMinUpDown.Value = new decimal(new int[] {
             1,
@@ -290,7 +296,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label1, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.monsterDefenceMaxUpDown, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.monsterDefenceAllowUndefinitionCheckBox, 3, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(149, 416);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(211, 385);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -368,7 +374,7 @@
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackRangeLabel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackAllowUndefinitionCheckBox, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.monsterAttackMinUpDown, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(149, 381);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(211, 350);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -440,7 +446,7 @@
             // 
             this.monsterTypeListBox.FormattingEnabled = true;
             this.monsterTypeListBox.ItemHeight = 12;
-            this.monsterTypeListBox.Location = new System.Drawing.Point(149, 300);
+            this.monsterTypeListBox.Location = new System.Drawing.Point(211, 269);
             this.monsterTypeListBox.Name = "monsterTypeListBox";
             this.monsterTypeListBox.Size = new System.Drawing.Size(170, 64);
             this.monsterTypeListBox.TabIndex = 10;
@@ -449,7 +455,7 @@
             // 
             this.monsterAttributeListBox.FormattingEnabled = true;
             this.monsterAttributeListBox.ItemHeight = 12;
-            this.monsterAttributeListBox.Location = new System.Drawing.Point(149, 253);
+            this.monsterAttributeListBox.Location = new System.Drawing.Point(211, 222);
             this.monsterAttributeListBox.Name = "monsterAttributeListBox";
             this.monsterAttributeListBox.Size = new System.Drawing.Size(170, 40);
             this.monsterAttributeListBox.TabIndex = 9;
@@ -458,7 +464,7 @@
             // 
             this.monsterTypeLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterTypeLabel.AutoSize = true;
-            this.monsterTypeLabel.Location = new System.Drawing.Point(4, 331);
+            this.monsterTypeLabel.Location = new System.Drawing.Point(4, 300);
             this.monsterTypeLabel.Name = "monsterTypeLabel";
             this.monsterTypeLabel.Size = new System.Drawing.Size(29, 12);
             this.monsterTypeLabel.TabIndex = 10;
@@ -468,7 +474,7 @@
             // 
             this.kindLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.kindLabel.AutoSize = true;
-            this.kindLabel.Location = new System.Drawing.Point(4, 169);
+            this.kindLabel.Location = new System.Drawing.Point(4, 138);
             this.kindLabel.Name = "kindLabel";
             this.kindLabel.Size = new System.Drawing.Size(57, 12);
             this.kindLabel.TabIndex = 7;
@@ -476,7 +482,7 @@
             // 
             // textTextBox
             // 
-            this.textTextBox.Location = new System.Drawing.Point(149, 114);
+            this.textTextBox.Location = new System.Drawing.Point(211, 83);
             this.textTextBox.Name = "textTextBox";
             this.textTextBox.Size = new System.Drawing.Size(220, 19);
             this.textTextBox.TabIndex = 6;
@@ -485,7 +491,7 @@
             // 
             this.kindFlowLayoutPanel.Controls.Add(this.kindListBox1);
             this.kindFlowLayoutPanel.Controls.Add(this.kindListBox2);
-            this.kindFlowLayoutPanel.Location = new System.Drawing.Point(149, 140);
+            this.kindFlowLayoutPanel.Location = new System.Drawing.Point(211, 109);
             this.kindFlowLayoutPanel.Name = "kindFlowLayoutPanel";
             this.kindFlowLayoutPanel.Size = new System.Drawing.Size(547, 70);
             this.kindFlowLayoutPanel.TabIndex = 7;
@@ -512,7 +518,7 @@
             // 
             this.nameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(4, 65);
+            this.nameLabel.Location = new System.Drawing.Point(4, 34);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(45, 12);
             this.nameLabel.TabIndex = 2;
@@ -522,7 +528,7 @@
             // 
             this.textLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textLabel.AutoSize = true;
-            this.textLabel.Location = new System.Drawing.Point(4, 117);
+            this.textLabel.Location = new System.Drawing.Point(4, 86);
             this.textLabel.Name = "textLabel";
             this.textLabel.Size = new System.Drawing.Size(65, 12);
             this.textLabel.TabIndex = 5;
@@ -530,14 +536,14 @@
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(149, 62);
+            this.nameTextBox.Location = new System.Drawing.Point(211, 31);
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(220, 19);
             this.nameTextBox.TabIndex = 1;
             // 
             // pronunciationTextBox
             // 
-            this.pronunciationTextBox.Location = new System.Drawing.Point(149, 88);
+            this.pronunciationTextBox.Location = new System.Drawing.Point(211, 57);
             this.pronunciationTextBox.Name = "pronunciationTextBox";
             this.pronunciationTextBox.Size = new System.Drawing.Size(220, 19);
             this.pronunciationTextBox.TabIndex = 4;
@@ -546,7 +552,7 @@
             // 
             this.pronunciationLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pronunciationLabel.AutoSize = true;
-            this.pronunciationLabel.Location = new System.Drawing.Point(4, 91);
+            this.pronunciationLabel.Location = new System.Drawing.Point(4, 60);
             this.pronunciationLabel.Name = "pronunciationLabel";
             this.pronunciationLabel.Size = new System.Drawing.Size(28, 12);
             this.pronunciationLabel.TabIndex = 3;
@@ -556,7 +562,7 @@
             // 
             this.monsterAttributeLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.monsterAttributeLabel.AutoSize = true;
-            this.monsterAttributeLabel.Location = new System.Drawing.Point(4, 267);
+            this.monsterAttributeLabel.Location = new System.Drawing.Point(4, 236);
             this.monsterAttributeLabel.Name = "monsterAttributeLabel";
             this.monsterAttributeLabel.Size = new System.Drawing.Size(29, 12);
             this.monsterAttributeLabel.TabIndex = 9;
@@ -566,7 +572,7 @@
             // 
             this.resultCountLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.resultCountLabel.AutoSize = true;
-            this.resultCountLabel.Location = new System.Drawing.Point(4, 459);
+            this.resultCountLabel.Location = new System.Drawing.Point(4, 443);
             this.resultCountLabel.Name = "resultCountLabel";
             this.resultCountLabel.Size = new System.Drawing.Size(117, 12);
             this.resultCountLabel.TabIndex = 18;
@@ -576,7 +582,7 @@
             // 
             this.attackCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.attackCheckBox.AutoSize = true;
-            this.attackCheckBox.Location = new System.Drawing.Point(4, 387);
+            this.attackCheckBox.Location = new System.Drawing.Point(4, 356);
             this.attackCheckBox.Name = "attackCheckBox";
             this.attackCheckBox.Size = new System.Drawing.Size(84, 16);
             this.attackCheckBox.TabIndex = 21;
@@ -591,7 +597,7 @@
             0,
             0,
             0});
-            this.resultCountUpDown.Location = new System.Drawing.Point(149, 455);
+            this.resultCountUpDown.Location = new System.Drawing.Point(211, 440);
             this.resultCountUpDown.Maximum = new decimal(new int[] {
             500,
             0,
@@ -611,23 +617,12 @@
             0,
             0});
             // 
-            // levelCheckBox
-            // 
-            this.levelCheckBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.levelCheckBox.AutoSize = true;
-            this.levelCheckBox.Location = new System.Drawing.Point(4, 223);
-            this.levelCheckBox.Name = "levelCheckBox";
-            this.levelCheckBox.Size = new System.Drawing.Size(138, 16);
-            this.levelCheckBox.TabIndex = 24;
-            this.levelCheckBox.Text = "レベル/ランク/リンク検索";
-            this.levelCheckBox.UseVisualStyleBackColor = true;
-            // 
             // searchButton
             // 
-            this.searchButton.Font = new System.Drawing.Font("MS UI Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.searchButton.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.searchButton.Location = new System.Drawing.Point(4, 4);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(138, 51);
+            this.searchButton.Size = new System.Drawing.Size(117, 20);
             this.searchButton.TabIndex = 25;
             this.searchButton.Text = "検索";
             this.searchButton.UseVisualStyleBackColor = true;
@@ -635,9 +630,9 @@
             // 
             // conditionClearButton
             // 
-            this.conditionClearButton.Location = new System.Drawing.Point(149, 4);
+            this.conditionClearButton.Location = new System.Drawing.Point(211, 4);
             this.conditionClearButton.Name = "conditionClearButton";
-            this.conditionClearButton.Size = new System.Drawing.Size(151, 51);
+            this.conditionClearButton.Size = new System.Drawing.Size(151, 20);
             this.conditionClearButton.TabIndex = 26;
             this.conditionClearButton.Text = "検索条件リセット";
             this.conditionClearButton.UseVisualStyleBackColor = true;
@@ -676,6 +671,60 @@
             this.cardDescription.Size = new System.Drawing.Size(607, 192);
             this.cardDescription.TabIndex = 16;
             // 
+            // levelRankLinkGroupBox
+            // 
+            this.levelRankLinkGroupBox.Controls.Add(this.linkRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.rankRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.levelRadioButton);
+            this.levelRankLinkGroupBox.Controls.Add(this.nonRadioButton);
+            this.levelRankLinkGroupBox.Location = new System.Drawing.Point(4, 186);
+            this.levelRankLinkGroupBox.Name = "levelRankLinkGroupBox";
+            this.levelRankLinkGroupBox.Size = new System.Drawing.Size(200, 29);
+            this.levelRankLinkGroupBox.TabIndex = 27;
+            this.levelRankLinkGroupBox.TabStop = false;
+            // 
+            // nonRadioButton
+            // 
+            this.nonRadioButton.AutoSize = true;
+            this.nonRadioButton.Checked = true;
+            this.nonRadioButton.Location = new System.Drawing.Point(7, 7);
+            this.nonRadioButton.Name = "nonRadioButton";
+            this.nonRadioButton.Size = new System.Drawing.Size(42, 16);
+            this.nonRadioButton.TabIndex = 0;
+            this.nonRadioButton.TabStop = true;
+            this.nonRadioButton.Text = "なし";
+            this.nonRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // levelRadioButton
+            // 
+            this.levelRadioButton.AutoSize = true;
+            this.levelRadioButton.Location = new System.Drawing.Point(46, 7);
+            this.levelRadioButton.Name = "levelRadioButton";
+            this.levelRadioButton.Size = new System.Drawing.Size(35, 16);
+            this.levelRadioButton.TabIndex = 1;
+            this.levelRadioButton.Text = "Lv";
+            this.levelRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // rankRadioButton
+            // 
+            this.rankRadioButton.AutoSize = true;
+            this.rankRadioButton.Location = new System.Drawing.Point(87, 7);
+            this.rankRadioButton.Name = "rankRadioButton";
+            this.rankRadioButton.Size = new System.Drawing.Size(49, 16);
+            this.rankRadioButton.TabIndex = 2;
+            this.rankRadioButton.Text = "Rank";
+            this.rankRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // linkRadioButton
+            // 
+            this.linkRadioButton.AutoSize = true;
+            this.linkRadioButton.Location = new System.Drawing.Point(136, 7);
+            this.linkRadioButton.Name = "linkRadioButton";
+            this.linkRadioButton.Size = new System.Drawing.Size(44, 16);
+            this.linkRadioButton.TabIndex = 3;
+            this.linkRadioButton.Text = "Link";
+            this.linkRadioButton.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -710,6 +759,8 @@
             this.kindFlowLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.resultCountUpDown)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.levelRankLinkGroupBox.ResumeLayout(false);
+            this.levelRankLinkGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -758,9 +809,13 @@
         private System.Windows.Forms.Label resultCountLabel;
         private System.Windows.Forms.CheckBox attackCheckBox;
         private System.Windows.Forms.NumericUpDown resultCountUpDown;
-        private System.Windows.Forms.CheckBox levelCheckBox;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Button conditionClearButton;
+        private System.Windows.Forms.GroupBox levelRankLinkGroupBox;
+        private System.Windows.Forms.RadioButton linkRadioButton;
+        private System.Windows.Forms.RadioButton rankRadioButton;
+        private System.Windows.Forms.RadioButton levelRadioButton;
+        private System.Windows.Forms.RadioButton nonRadioButton;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using YugiohDeck.Core;
+using YugiohCardDatabase;
 
 namespace YugiohDeck.UI
 {

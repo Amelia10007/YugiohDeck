@@ -2,93 +2,125 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Drawing;
+using YugiohDeck.Core;
+using YugiohCardDatabase;
+
+#nullable enable
 
 namespace YugiohDeck.Database
 {
+    enum FileType
+    {
+        CardText,
+        CardImage,
+        LimitRegulation,
+        Deck,
+    }
+
     static class Storage
     {
-        private static readonly string executableDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        public static bool Exists(IEnumerable<string> keywords)
+        private static readonly Dictionary<FileType, string> directoryPaths = new Dictionary<FileType, string>();
+
+        public static IEnumerable<Card> EnumerateCards()
         {
-            var path = GetFilePath(keywords);
-            return File.Exists(path);
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var ss = directoryPaths[FileType.CardText];
+            return Directory.EnumerateFiles(directoryPaths[FileType.CardText])
+                .Where(path => Path.GetExtension(path).ToLower() == ".json")
+                .Select(path => File.ReadAllText(path))
+                .Select(json => Json.Deserialize<Card>(json))
+                .Where(card => card.IdentityShortName != null);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="recursive"></param>
-        /// <param name="keywords"></param>
-        /// <returns></returns>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="PathTooLongException"></exception>
-        public static IEnumerable<string[]> EnumerateExistingFiles(bool recursive, IEnumerable<string> keywords)
+
+        public static IEnumerable<string> EnumerateDecknames()
         {
-            var path = GetFilePath(keywords);
-            var searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            if (!Directory.Exists(path)) yield break;
-            var filenames = Directory.EnumerateFiles(path, "*", searchOption);
-            var seperator = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-            var executableDirectoryKeywordCount = executableDirectory.Split(seperator).Length;
-            foreach (var filename in filenames)
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            return Directory.EnumerateFiles(directoryPaths[FileType.Deck])
+                .Where(path => Path.GetExtension(path).ToLower() == ".json")
+                .Select(path => Path.GetFileNameWithoutExtension(path));
+        }
+
+        public static Card ReadCard(string cardName)
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.CardText] + cardName + ".json";
+            var json = File.ReadAllText(path);
+            return Json.Deserialize<Card>(json);
+        }
+
+        public static Bitmap ReadImage(string cardName)
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.CardImage] + cardName + ".jpg";
+            return new Bitmap(path);
+        }
+
+        public static LimitRegulationDatabase ReadLimitRegulationDatabase()
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.LimitRegulation];
+            var json = File.ReadAllText(path);
+            return Json.Deserialize<LimitRegulationDatabase>(json);
+        }
+
+        public static Deck ReadDeck(string deckName)
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.Deck] + deckName + ".json";
+            var json = File.ReadAllText(path);
+            return Json.Deserialize<Deck>(json);
+        }
+
+        public static void WriteDeck(Deck deck)
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.Deck] + deck.Name + ".json";
+            var json = Json.Serialize(deck);
+            File.WriteAllText(path, json);
+        }
+
+        public static void DeleteDeck(string deckName)
+        {
+            if (!directoryPaths.Any()) LoadDirectoryPathSetting();
+            var path = directoryPaths[FileType.Deck] + deckName + ".json";
+            File.Delete(path);
+        }
+
+        private static void LoadDirectoryPathSetting()
+        {
+            directoryPaths.Clear();
+            var settingFilePath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\setting.txt";
+            var lines = File.ReadAllLines(settingFilePath);
+            foreach (var line in lines)
             {
-                var pathKeywords = filename.Split(seperator).Skip(executableDirectoryKeywordCount);
-                var comparisonCount = keywords.Count();
-                var comparisonTarget = pathKeywords.Take(comparisonCount);
-                if (keywords.SequenceEqual(comparisonTarget)) yield return pathKeywords.ToArray();
+                if (line.IndexOf("CardDataDirectory=") != -1)
+                {
+                    var index = line.IndexOf("CardDataDirectory=");
+                    var cardDataDirectory = line.Substring(index + "CardDataDirectory=".Length).Replace("/", "\\").TrimEnd('\\');
+                    if (!directoryPaths.ContainsKey(FileType.CardText))
+                    {
+                        directoryPaths.Add(FileType.CardText, cardDataDirectory + "\\text\\");
+                    }
+                    if (!directoryPaths.ContainsKey(FileType.CardImage))
+                    {
+                        directoryPaths.Add(FileType.CardImage, cardDataDirectory + "\\image\\");
+                    }
+                    if (!directoryPaths.ContainsKey(FileType.LimitRegulation))
+                    {
+                        directoryPaths.Add(FileType.LimitRegulation, cardDataDirectory + "\\LimitRegulation.json");
+                    }
+                }
+                else if (line.IndexOf("DeckDirectory=") != -1)
+                {
+                    var index = line.IndexOf("DeckDirectory=");
+                    var deckDirectory = line.Substring(index + "DeckDirectory=".Length).Replace("/", "\\").TrimEnd('\\') + "\\";
+                    if (!directoryPaths.ContainsKey(FileType.Deck))
+                    {
+                        directoryPaths.Add(FileType.Deck, deckDirectory);
+                    }
+                }
             }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keywords"></param>
-        /// <returns></returns>
-        /// <exception cref="PathTooLongException"></exception>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="FileNotFoundException"></exception>
-        public static string ReadString(IEnumerable<string> keywords)
-        {
-            var path = GetFilePath(keywords);
-            return File.ReadAllText(path);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="keywords"></param>
-        /// <exception cref="PathTooLongException"></exception>
-        /// <exception cref="IOException"></exception>
-        public static void WriteString(string content, IEnumerable<string> keywords)
-        {
-            var path = GetFilePath(keywords);
-            var directory = Path.GetDirectoryName(path);
-            Directory.CreateDirectory(directory);
-            File.WriteAllText(path, content);
-        }
-        public static byte[] ReadBytes(IEnumerable<string> keywords)
-        {
-            var path = GetFilePath(keywords);
-            return File.ReadAllBytes(path);
-        }
-        public static void WriteBytes(byte[] content, IEnumerable<string> keywords)
-        {
-            var path = GetFilePath(keywords);
-            File.WriteAllBytes(path, content);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keywords"></param>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="PathTooLongException"></exception>
-        public static void Delete(IEnumerable<string> keywords)
-        {
-            var path = GetFilePath(keywords);
-            if (File.Exists(path)) File.Delete(path);
-            else if (Directory.Exists(path)) Directory.Delete(path);
-        }
-        private static string GetFilePath(IEnumerable<string> keywords)
-        {
-            return executableDirectory + "data\\" + keywords.Aggregate((current, next) => current + "\\" + next);
         }
     }
 }
