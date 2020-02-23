@@ -59,7 +59,7 @@ namespace YugiohDeck.UI
 
         private void AddSearchResult(Card card)
         {
-            var result = new Searchresult() { Card = card };
+            var result = new Searchresult() { LimitRegulationDatabase = this.limitRegulationDatabase, Card = card };
             result.MainDeckAddButtonClicked += this.MainDeckAddButton_Click;
             result.ExtraDeckAddButtonClicked += this.ExtraDeckAddButton_Click;
             result.SideDeckAddButtonClicked += this.SideDeckAddButton_Click;
@@ -113,6 +113,7 @@ namespace YugiohDeck.UI
 
         private void ShowCardDescription(Card card)
         {
+            this.cardDescription.LimitRegulationDatabase = this.limitRegulationDatabase;
             this.cardDescription.Card = card;
         }
 

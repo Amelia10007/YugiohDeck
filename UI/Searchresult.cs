@@ -10,16 +10,21 @@ namespace YugiohDeck.UI
         public event EventHandler<Card> MainDeckAddButtonClicked;
         public event EventHandler<Card> ExtraDeckAddButtonClicked;
         public event EventHandler<Card> SideDeckAddButtonClicked;
+     
         public Card Card
         {
             get => this.cardDescription.Card;
             set
             {
+                this.cardDescription.LimitRegulationDatabase = this.LimitRegulationDatabase;
                 this.cardDescription.Card = value;
                 var back = CardColor.GetColor(value.Kinds);
                 this.BackColor = back;
             }
         }
+
+        public LimitRegulationDatabase LimitRegulationDatabase { get; set; }
+        
         public Searchresult()
         {
             InitializeComponent();
